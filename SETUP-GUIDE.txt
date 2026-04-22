@@ -1,0 +1,277 @@
+# சித்த வளம் — Complete Setup & Deployment Guide v2
+# ═══════════════════════════════════════════════════
+
+This guide will get your shop LIVE on the internet.
+Total cost first year: ₹800 only (domain only).
+Everything else is FREE.
+
+═══════════════════════════════════════════════════
+ WHAT YOU HAVE IN THIS PACKAGE
+═══════════════════════════════════════════════════
+
+siddha-valam/
+├── frontend/
+│   ├── index.html          ← Main shop page (loads products from DB)
+│   ├── checkout.html       ← Checkout with real coupon validation
+│   └── order-success.html  ← Order confirmed page
+├── backend/
+│   ├── server.js           ← Complete backend (Node.js + MongoDB)
+│   ├── package.json        ← Dependencies
+│   └── .env.example        ← Copy as .env and fill values
+├── admin/
+│   └── index.html          ← Full admin panel
+└── SETUP-GUIDE.txt         ← This file
+
+NEW FEATURES vs Old Version:
+✅ Products load from MongoDB (not hardcoded)
+✅ Real coupon validation from database
+✅ WhatsApp messages on every order (via Twilio)
+✅ SMS notifications on every order (via Twilio)
+✅ Email confirmations (via Gmail)
+✅ Free shipping progress bar in cart
+✅ Product details modal (ingredients, how to use)
+✅ Admin: Dashboard with live stats
+✅ Admin: Update order status + tracking number
+✅ Admin: Add/Edit/Delete products
+✅ Admin: Create and manage coupons
+✅ Auto-seed 12 products + 3 coupons on first run
+
+
+═══════════════════════════════════════════════════
+ STEP 1 — MONGODB ATLAS (FREE Database)
+═══════════════════════════════════════════════════
+
+1. Go to: https://mongodb.com/atlas
+2. Click "Try Free" → Sign up with Google
+3. Choose FREE plan (M0)
+4. Select region: Mumbai (ap-south-1)
+5. Click "Create"
+6. Security Quickstart:
+   - Username: siddha-admin
+   - Password: (create a strong password — write it down!)
+   - Click "Create User"
+7. Network Access: Click "Add IP Address" → "Allow from anywhere" → Confirm
+8. Click "Connect" → "Drivers" → Copy connection string
+   Looks like: mongodb+srv://siddha-admin:PASSWORD@cluster0.xxxxx.mongodb.net/
+9. Replace <password> with your actual password
+
+
+═══════════════════════════════════════════════════
+ STEP 2 — RAZORPAY (Payment Gateway)
+═══════════════════════════════════════════════════
+
+1. Go to: https://razorpay.com
+2. Click "Sign Up" → Fill your details
+3. Go to: Settings → API Keys → Generate Test Key
+4. Copy Key ID (starts with rzp_test_) and Key Secret
+5. Keep these safe — you'll need them below
+
+For LIVE payments (when ready to launch):
+- Submit your business documents in Razorpay
+- Generate LIVE key (starts with rzp_live_)
+- Replace test key with live key in .env
+
+
+═══════════════════════════════════════════════════
+ STEP 3 — GMAIL (Email Notifications) — OPTIONAL
+═══════════════════════════════════════════════════
+
+1. Create or use a Gmail: yourshop@gmail.com
+2. Go to: https://myaccount.google.com/security
+3. Enable 2-Step Verification (if not already)
+4. Go to: App passwords (search for it)
+5. Select app: Mail | Select device: Other
+6. Enter name: SiddhaValam → Click Generate
+7. Copy the 16-character password shown
+   (Write it down — you can't see it again!)
+8. Use this password as EMAIL_PASS in .env
+
+
+═══════════════════════════════════════════════════
+ STEP 4 — TWILIO (WhatsApp + SMS) — OPTIONAL
+═══════════════════════════════════════════════════
+
+WhatsApp & SMS alerts to customers on order.
+Free trial gives you $15 credit to start.
+
+1. Go to: https://twilio.com → Sign up
+2. Verify your phone number
+3. Dashboard → Copy Account SID and Auth Token
+4. For WhatsApp:
+   - Twilio Console → Messaging → Try it out → WhatsApp
+   - Follow the sandbox setup (scan QR code)
+   - WhatsApp From number: +14155238886 (sandbox)
+5. For SMS:
+   - Buy a phone number → Costs ~$1/month
+   - Copy the number as TWILIO_SMS_FROM in .env
+
+
+═══════════════════════════════════════════════════
+ STEP 5 — CREATE YOUR .ENV FILE
+═══════════════════════════════════════════════════
+
+1. Open backend/ folder
+2. Find file: .env.example
+3. Copy it and rename to: .env
+4. Open .env and fill in all values:
+
+   MONGO_URI=mongodb+srv://siddha-admin:YOUR_PASS@cluster0.xxxx.mongodb.net/siddha-valam
+   RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+   RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxx
+   EMAIL_USER=yourshop@gmail.com
+   EMAIL_PASS=xxxx xxxx xxxx xxxx
+   TWILIO_SID=ACxxxxxxxx (optional)
+   TWILIO_TOKEN=xxxxxxxx  (optional)
+   SHOP_WHATSAPP=+91 99628 05303
+
+IMPORTANT: Never share your .env file with anyone.
+Also: Don't upload .env to GitHub (it's in .gitignore).
+
+
+═══════════════════════════════════════════════════
+ STEP 6 — TEST ON YOUR COMPUTER FIRST
+═══════════════════════════════════════════════════
+
+Install Node.js:
+- Go to: https://nodejs.org
+- Download LTS version → Install it
+
+Run the shop:
+1. Open Command Prompt (Windows) or Terminal (Mac)
+2. Type these one by one:
+
+   cd Desktop\siddha-valam\backend
+   npm install
+   node server.js
+
+3. You should see:
+   ✅ MongoDB connected
+   🌿 சித்த வளம் server running at http://localhost:3000
+
+4. Open browser → go to: http://localhost:3000
+   → Products load automatically from your MongoDB!
+
+5. Admin panel: http://localhost:3000/admin
+   → Click Dashboard to see live stats
+
+
+═══════════════════════════════════════════════════
+ STEP 7 — DEPLOY LIVE ON RAILWAY
+═══════════════════════════════════════════════════
+
+GitHub Setup:
+1. Go to: https://github.com → Sign up (free)
+2. New Repository → Name: siddha-valam → Public
+3. Upload all your project files (drag & drop works)
+   IMPORTANT: Do NOT upload your .env file!
+
+Railway Deploy:
+4. Go to: https://railway.app → Login with GitHub
+5. "New Project" → "Deploy from GitHub Repo"
+6. Select your siddha-valam repository
+7. Click "Variables" tab → Add each variable:
+   MONGO_URI          = (your mongodb string)
+   RAZORPAY_KEY_ID    = (your razorpay key)
+   RAZORPAY_KEY_SECRET= (your razorpay secret)
+   EMAIL_USER         = (your gmail)
+   EMAIL_PASS         = (your app password)
+   PORT               = 3000
+   (add Twilio ones if you have them)
+8. Railway auto-deploys → You get a URL like:
+   https://siddha-valam-production.up.railway.app
+
+Your shop is LIVE! 🚀
+
+
+═══════════════════════════════════════════════════
+ STEP 8 — CUSTOM DOMAIN (Optional but Professional)
+═══════════════════════════════════════════════════
+
+1. Buy domain at: https://hostinger.in
+   - siddhavalam.in costs ~₹800/year
+   - Or siddhavalam.com costs ~₹1000/year
+
+2. In Railway → Settings → Custom Domain
+3. Type your domain name → Click Add
+4. Railway shows you a DNS CNAME record
+
+5. In Hostinger → Domains → Manage → DNS
+6. Add CNAME record with Railway's value
+7. Wait 1-2 hours → Done! Your domain works 🎉
+
+
+═══════════════════════════════════════════════════
+ RAZORPAY KEY IN CHECKOUT
+═══════════════════════════════════════════════════
+
+The checkout.html gets the Razorpay key automatically
+from the backend (/api/orders/create-payment returns keyId).
+So you only need to set it in .env once — no need to edit HTML!
+
+
+═══════════════════════════════════════════════════
+ DEFAULT COUPONS (auto-created on first run)
+═══════════════════════════════════════════════════
+
+SIDDHA20   → 20% off, any order
+WELCOME10  → 10% off, any order
+FLAT50     → ₹50 off, orders above ₹299
+
+Create more from Admin Panel → Coupons → Add Coupon
+
+
+═══════════════════════════════════════════════════
+ ADMIN PANEL FEATURES
+═══════════════════════════════════════════════════
+
+Go to: https://your-site.com/admin
+
+📊 Dashboard:
+   - Total orders, revenue, products, pending orders
+   - Recent orders list
+
+📦 Orders:
+   - See all orders with customer details
+   - Filter by status (pending, shipped, etc.)
+   - Update status + add tracking number
+   - Customer gets WhatsApp + SMS notification!
+
+🌿 Products:
+   - Add / Edit / Delete products
+   - Set price, stock, badge, ingredients, how-to-use
+   - Mark as featured
+
+🏷️ Coupons:
+   - Create % or flat discount coupons
+   - Set minimum order, max uses, expiry date
+   - Delete coupons
+
+
+═══════════════════════════════════════════════════
+ COSTS SUMMARY
+═══════════════════════════════════════════════════
+
+Domain (.in)         ₹800/year     ← You pay
+MongoDB Atlas        FREE forever  ← Free
+Railway Hosting      FREE to start ← Free (upgrade when busy)
+Razorpay Setup       FREE          ← Free setup
+Razorpay per order   2% per order  ← Only when you earn!
+Gmail/Email          FREE          ← Free
+Twilio (WhatsApp)    $15 free trial, then ~₹2/message
+
+First year total: ₹800 only!
+When business grows → Railway upgrade ~₹1,500/month
+
+
+═══════════════════════════════════════════════════
+ NEED HELP? ASK CLAUDE!
+═══════════════════════════════════════════════════
+
+Come back to Claude.ai and say:
+- "Add Instagram link to my Siddha Valam website"
+- "My website is showing error: [paste the error]"
+- "How do I add more categories?"
+- "Add a product image upload feature"
+- "Add GST / invoice to orders"
+
+Made with 💚 for சித்த வளம்

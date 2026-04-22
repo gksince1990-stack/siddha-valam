@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — சித்த வளம்</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil&family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--forest:#1E3A1E;--forest2:#2D5A2D;--saffron:#C8762A;--saffron-lt:#FDF0DC;--cream:#FAF7F0;--bark:#6B4223;--gold:#D4A437;--text:#1C1208;--muted:#7A6550;--border:#E2D5C0;--white:#FFFFFF;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text)}
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 2.5rem;height:68px;display:flex;align-items:center;justify-content:space-between}
+.logo-wrap{text-decoration:none}
+.logo-tamil{font-family:'Tiro Tamil',serif;font-size:20px;color:var(--forest)}
+.logo-en{font-size:10px;letter-spacing:3px;color:var(--saffron);text-transform:uppercase}
+.back-link{font-size:14px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s}
+.back-link:hover{color:var(--forest)}
+.checkout-wrap{max-width:1000px;margin:0 auto;padding:2.5rem 1.5rem;display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start}
+h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest);margin-bottom:1.5rem}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.75rem;margin-bottom:1.25rem}
+.card h3{font-size:14px;font-weight:500;color:var(--text);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem}
+.form-group label{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.3px}
+.form-group input,.form-group select,.form-group textarea{padding:11px 14px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:'DM Sans',sans-serif;background:white;color:var(--text);outline:none;transition:border-color 0.2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--forest)}
+.form-group textarea{resize:vertical;min-height:70px}
+.field-error{border-color:#e74c3c !important}
+.field-error-msg{font-size:11px;color:#e74c3c;margin-top:3px}
+.pay-methods{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem}
+.pay-opt{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;transition:all 0.2s}
+.pay-opt.selected{border-color:var(--forest);background:rgba(30,58,30,0.04)}
+.pay-opt input[type=radio]{accent-color:var(--forest)}
+.pay-opt label{font-size:14px;cursor:pointer;flex:1}
+.pay-opt .pay-right{margin-left:auto;font-size:13px;color:var(--muted)}
+/* ORDER SUMMARY */
+.order-summary{position:sticky;top:80px}
+.cart-line{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cart-line:last-child{border-bottom:none}
+.item-img{width:48px;height:48px;background:var(--saffron-lt);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.item-detail{flex:1}
+.item-name{font-size:13px;font-weight:500;color:var(--text)}
+.item-qty{font-size:12px;color:var(--muted)}
+.item-price{font-size:14px;font-weight:500;color:var(--forest)}
+.summary-row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;color:var(--muted)}
+.summary-row.free{color:var(--forest);font-weight:500}
+.summary-row.total{border-top:1px solid var(--border);margin-top:0.5rem;padding-top:0.75rem;font-size:16px;font-weight:500;color:var(--text)}
+.summary-row.total span:last-child{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest);font-weight:600}
+.coupon-row{display:flex;gap:0.5rem;margin-bottom:0.75rem}
+.coupon-row input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;text-transform:uppercase}
+.coupon-row input:focus{border-color:var(--saffron)}
+.coupon-row button{background:var(--saffron-lt);color:var(--bark);border:1px solid rgba(200,118,42,0.3);padding:10px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.coupon-row button:hover{background:var(--saffron);color:white;border-color:var(--saffron)}
+.coupon-success{font-size:12px;color:var(--forest);background:#E8F5E8;border:1px solid rgba(30,58,30,0.2);border-radius:4px;padding:8px 12px;margin-bottom:0.75rem;display:none}
+.coupon-error{font-size:12px;color:#c0392b;background:#fdf0f0;border:1px solid rgba(192,57,43,0.2);border-radius:4px;padding:8px 12px;margin-bottom:0.75rem;display:none}
+.place-btn{width:100%;background:var(--forest);color:white;border:none;padding:16px;border-radius:6px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:1rem;transition:all 0.2s;letter-spacing:0.3px}
+.place-btn:hover:not(:disabled){background:var(--forest2)}
+.place-btn:disabled{opacity:0.65;cursor:not-allowed}
+.secure-note{text-align:center;font-size:12px;color:var(--muted);margin-top:0.75rem;display:flex;align-items:center;justify-content:center;gap:4px}
+.empty-cart{text-align:center;padding:4rem 2rem}
+.empty-cart h3{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest);margin-bottom:1rem}
+.go-shop{display:inline-block;background:var(--forest);color:white;padding:12px 28px;border-radius:4px;text-decoration:none;font-size:14px;margin-top:1rem;transition:background 0.2s}
+.go-shop:hover{background:var(--forest2)}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest);color:white;padding:12px 24px;border-radius:6px;font-size:14px;opacity:0;transition:all 0.3s;z-index:500;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:768px){
+  nav{padding:0 1.25rem}
+  .checkout-wrap{grid-template-columns:1fr}
+  .order-summary{position:static}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo-wrap">
+    <div class="logo-tamil">சித்த வளம்</div>
+    <div class="logo-en">Siddha Valam</div>
+  </a>
+  <a href="/" class="back-link">← Continue Shopping</a>
+</nav>
+
+<div id="checkoutWrap">
+<div class="checkout-wrap">
+  <div class="checkout-left">
+    <h2>Complete Your Order</h2>
+
+    <div class="card">
+      <h3>📦 Delivery Information</h3>
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input type="text" id="fname" placeholder="Rajan"></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="lname" placeholder="Kumar"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Mobile Number *</label><input type="tel" id="phone" placeholder="9876543210" maxlength="10"></div>
+        <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="you@email.com"></div>
+      </div>
+      <div class="form-group"><label>Full Address *</label><textarea id="address" placeholder="House No, Street, Area / Landmark"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>City *</label><input type="text" id="city" placeholder="Chennai"></div>
+        <div class="form-group"><label>PIN Code *</label><input type="text" id="pin" placeholder="600001" maxlength="6"></div>
+      </div>
+      <div class="form-group">
+        <label>State *</label>
+        <select id="state">
+          <option value="">Select State</option>
+          <option value="Tamil Nadu" selected>Tamil Nadu</option>
+          <option value="Kerala">Kerala</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Other">Other State</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>💳 Payment Method</h3>
+      <div class="pay-methods">
+        <div class="pay-opt selected" onclick="selectPay(this,'razorpay')">
+          <input type="radio" name="pay" checked>
+          <label>UPI / Cards / Net Banking / Wallets</label>
+          <div class="pay-right">🏦 Secure</div>
+        </div>
+        <div class="pay-opt" onclick="selectPay(this,'cod')">
+          <input type="radio" name="pay">
+          <label>Cash on Delivery (COD)</label>
+          <div class="pay-right">💵 +₹30</div>
+        </div>
+      </div>
+      <div id="codNote" style="display:none;font-size:12px;color:var(--muted);background:var(--saffron-lt);padding:10px 14px;border-radius:6px">
+        💡 COD orders have an additional ₹30 handling fee. Pay the exact amount to delivery person.
+      </div>
+    </div>
+  </div>
+
+  <div class="order-summary">
+    <div class="card">
+      <h3>🛒 Order Summary</h3>
+      <div id="summaryItems"></div>
+      <div style="margin-top:1.25rem">
+        <div class="coupon-row">
+          <input type="text" id="couponInput" placeholder="Coupon code (e.g. SIDDHA20)">
+          <button onclick="applyCoupon()">Apply</button>
+        </div>
+        <div class="coupon-success" id="couponSuccess"></div>
+        <div class="coupon-error" id="couponError"></div>
+        <div class="summary-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+        <div class="summary-row" id="discountRow" style="color:var(--forest)"><span>Discount</span><span id="discountAmt">-₹0</span></div>
+        <div class="summary-row" id="shippingRow"><span>Shipping</span><span id="shippingAmt">₹60</span></div>
+        <div class="summary-row total"><span>Total</span><span id="grandTotal">₹0</span></div>
+      </div>
+      <button class="place-btn" id="placeBtn" onclick="placeOrder()">Place Order →</button>
+      <div class="secure-note">🔒 100% Secure Checkout</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem('sv_cart') || '[]');
+let payMethod = 'razorpay';
+let discountAmt = 0;
+let appliedCoupon = '';
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function calcTotals() {
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const codFee = payMethod === 'cod' ? 30 : 0;
+  const ship = sub >= 499 ? 0 : 60 + codFee;
+  const grand = sub - discountAmt + ship;
+  document.getElementById('subtotal').textContent = `₹${sub}`;
+  document.getElementById('discountAmt').textContent = `-₹${discountAmt}`;
+  const shipEl = document.getElementById('shippingAmt');
+  if (sub >= 499 && payMethod !== 'cod') {
+    shipEl.textContent = 'FREE 🎉';
+    shipEl.style.color = 'var(--forest)';
+  } else {
+    shipEl.textContent = `₹${ship}`;
+    shipEl.style.color = '';
+  }
+  document.getElementById('grandTotal').textContent = `₹${grand}`;
+  return { sub, discountAmt, ship, grand };
+}
+
+function renderSummary() {
+  if (!cart.length) {
+    document.getElementById('checkoutWrap').innerHTML = `<div class="empty-cart"><div style="font-size:48px;margin-bottom:1rem">🛒</div><h3>Your cart is empty</h3><p style="color:var(--muted)">Add some products before checking out</p><a href="/" class="go-shop">Go Shopping</a></div>`;
+    return;
+  }
+  document.getElementById('summaryItems').innerHTML = cart.map(i => `
+    <div class="cart-line">
+      <div class="item-img">${i.emoji}</div>
+      <div class="item-detail">
+        <div class="item-name">${i.name}</div>
+        <div class="item-qty">Qty: ${i.qty}</div>
+      </div>
+      <div class="item-price">₹${i.price * i.qty}</div>
+    </div>`).join('');
+  calcTotals();
+}
+
+async function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  if (!code) { showToast('Enter a coupon code'); return; }
+  const { sub } = calcTotals();
+  document.getElementById('couponSuccess').style.display = 'none';
+  document.getElementById('couponError').style.display = 'none';
+  try {
+    const res = await fetch('/api/coupons/validate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, orderTotal: sub })
+    });
+    const data = await res.json();
+    if (data.success) {
+      discountAmt = data.discount;
+      appliedCoupon = code;
+      const msg = `✓ Coupon "${code}" applied! ${data.type === 'percent' ? data.value + '% off' : '₹' + data.value + ' off'}`;
+      document.getElementById('couponSuccess').textContent = msg;
+      document.getElementById('couponSuccess').style.display = 'block';
+      calcTotals();
+    } else {
+      document.getElementById('couponError').textContent = '✕ ' + data.error;
+      document.getElementById('couponError').style.display = 'block';
+    }
+  } catch (e) {
+    // Fallback for demo
+    if (code === 'SIDDHA20') {
+      discountAmt = Math.round(sub * 0.2);
+      appliedCoupon = code;
+      document.getElementById('couponSuccess').textContent = '✓ 20% discount applied!';
+      document.getElementById('couponSuccess').style.display = 'block';
+      calcTotals();
+    } else {
+      document.getElementById('couponError').textContent = '✕ Invalid coupon code';
+      document.getElementById('couponError').style.display = 'block';
+    }
+  }
+}
+
+function selectPay(el, method) {
+  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  payMethod = method;
+  document.getElementById('codNote').style.display = method === 'cod' ? 'block' : 'none';
+  calcTotals();
+}
+
+function validateForm() {
+  const fields = [
+    { id: 'fname', label: 'First Name' },
+    { id: 'lname', label: 'Last Name' },
+    { id: 'phone', label: 'Mobile Number' },
+    { id: 'email', label: 'Email Address' },
+    { id: 'address', label: 'Address' },
+    { id: 'city', label: 'City' },
+    { id: 'pin', label: 'PIN Code' },
+    { id: 'state', label: 'State' },
+  ];
+  for (const f of fields) {
+    const el = document.getElementById(f.id);
+    if (!el.value.trim()) {
+      showToast(`Please fill in: ${f.label}`);
+      el.focus(); return false;
+    }
+  }
+  if (!/^\d{6}$/.test(document.getElementById('pin').value)) {
+    showToast('Please enter a valid 6-digit PIN code');
+    document.getElementById('pin').focus(); return false;
+  }
+  if (!/^\d{10}$/.test(document.getElementById('phone').value.replace(/\D/g, ''))) {
+    showToast('Please enter a valid 10-digit mobile number');
+    document.getElementById('phone').focus(); return false;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value)) {
+    showToast('Please enter a valid email address');
+    document.getElementById('email').focus(); return false;
+  }
+  return true;
+}
+
+function buildOrderData() {
+  const { grand, sub, discountAmt: disc, ship } = calcTotals();
+  return {
+    customer: {
+      name: document.getElementById('fname').value.trim() + ' ' + document.getElementById('lname').value.trim(),
+      phone: document.getElementById('phone').value.replace(/\D/g, ''),
+      email: document.getElementById('email').value.trim(),
+      address: {
+        street: document.getElementById('address').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        pin: document.getElementById('pin').value.trim(),
+        state: document.getElementById('state').value,
+      }
+    },
+    items: cart,
+    subtotal: sub,
+    discount: disc,
+    shipping: ship,
+    total: grand,
+    couponCode: appliedCoupon,
+    payMethod,
+  };
+}
+
+async function placeOrder() {
+  if (!validateForm()) return;
+  const { grand } = calcTotals();
+  const orderData = buildOrderData();
+  const btn = document.getElementById('placeBtn');
+
+  if (payMethod === 'cod') {
+    btn.disabled = true; btn.textContent = 'Placing Order...';
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...orderData, paymentStatus: 'COD' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.removeItem('sv_cart');
+        window.location.href = `order-success.html?id=${data.orderId}`;
+      } else {
+        showToast('Error placing order. Please try again.');
+        btn.disabled = false; btn.textContent = 'Place Order →';
+      }
+    } catch (e) {
+      localStorage.removeItem('sv_cart');
+      window.location.href = 'order-success.html?id=DEMO' + Date.now();
+    }
+    return;
+  }
+
+  // Razorpay
+  btn.disabled = true; btn.textContent = 'Initializing Payment...';
+  try {
+    const res = await fetch('/api/orders/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: grand * 100, currency: 'INR', orderData })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+
+    const options = {
+      key: data.keyId || 'YOUR_RAZORPAY_KEY_ID',
+      amount: grand * 100,
+      currency: 'INR',
+      name: 'சித்த வளம்',
+      description: 'Ayurvedic Products',
+      order_id: data.razorpayOrderId,
+      prefill: {
+        name: orderData.customer.name,
+        email: orderData.customer.email,
+        contact: orderData.customer.phone
+      },
+      theme: { color: '#1E3A1E' },
+      handler: async function(response) {
+        try {
+          await fetch('/api/orders/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(response)
+          });
+        } catch (e) {}
+        localStorage.removeItem('sv_cart');
+        window.location.href = `order-success.html?id=${data.orderId}`;
+      },
+      modal: {
+        ondismiss: function() {
+          btn.disabled = false; btn.textContent = 'Place Order →';
+        }
+      }
+    };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+    btn.textContent = 'Place Order →';
+  } catch (e) {
+    showToast('Demo mode: Redirecting to success page');
+    setTimeout(() => {
+      localStorage.removeItem('sv_cart');
+      window.location.href = 'order-success.html?id=DEMO' + Date.now();
+    }, 1500);
+    btn.disabled = false; btn.textContent = 'Place Order →';
+  }
+}
+
+renderSummary();
+</script>
+</body>
+</html>

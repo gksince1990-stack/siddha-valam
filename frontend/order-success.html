@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed — சித்த வளம்</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil&family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--forest:#1E3A1E;--saffron:#C8762A;--saffron-lt:#FDF0DC;--cream:#FAF7F0;--text:#1C1208;--muted:#7A6550;--border:#E2D5C0;--white:#FFFFFF;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.success-box{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:3rem 2.5rem;max-width:480px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.08)}
+.success-icon{font-size:80px;margin-bottom:1.5rem;animation:pop 0.5s ease}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.15)}100%{transform:scale(1)}}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--forest);margin-bottom:0.5rem}
+.success-sub{font-size:15px;color:var(--muted);margin-bottom:2rem;line-height:1.6}
+.order-id-box{background:var(--saffron-lt);border:1px solid rgba(200,118,42,0.3);border-radius:8px;padding:1.25rem;margin-bottom:2rem}
+.order-id-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.order-id{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--forest)}
+.info-list{list-style:none;text-align:left;margin-bottom:2rem}
+.info-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border)}
+.info-list li:last-child{border:none}
+.info-list li span:first-child{font-size:18px;flex-shrink:0}
+.btn-group{display:flex;gap:1rem;flex-direction:column}
+.btn-primary{background:var(--forest);color:white;border:none;padding:14px 28px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;text-align:center;transition:background 0.2s;display:block}
+.btn-primary:hover{background:#2D5A2D}
+.btn-wa{background:#25D366;color:white;border:none;padding:14px 28px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;text-align:center;transition:background 0.2s;display:block}
+.btn-wa:hover{background:#128C7E}
+.footer-note{margin-top:2rem;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="success-box">
+  <div class="success-icon">✅</div>
+  <div class="success-title">Order Confirmed!</div>
+  <p class="success-sub">Thank you for choosing சித்த வளம். Your Siddha products are being prepared with care.</p>
+  <div class="order-id-box">
+    <div class="order-id-label">Your Order ID</div>
+    <div class="order-id" id="orderId">Loading...</div>
+  </div>
+  <ul class="info-list">
+    <li><span>📱</span><span>You will receive a <strong>WhatsApp & SMS confirmation</strong> shortly with your order details.</span></li>
+    <li><span>📦</span><span>Your order will be <strong>delivered in 2–4 business days</strong>. We'll notify you when it ships.</span></li>
+    <li><span>📧</span><span>Order confirmation has been sent to your <strong>email address</strong>.</span></li>
+    <li><span>🌿</span><span>Your products are handpicked and packed with care from our Tamil Nadu facility.</span></li>
+  </ul>
+  <div class="btn-group">
+    <a href="/" class="btn-primary">Continue Shopping</a>
+    <a href="https://wa.me/919962805303" target="_blank" class="btn-wa">💬 Need Help? WhatsApp Us</a>
+  </div>
+  <div class="footer-note">சித்த வளம் — Made with 🌿 in Tamil Nadu</div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+document.getElementById('orderId').textContent = params.get('id') || 'SV00000';
+</script>
+</body>
+</html>
