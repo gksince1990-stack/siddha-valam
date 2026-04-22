@@ -1,0 +1,1 @@
+{"name":"siddha-valam","version":"2.0.0","main":"backend/server.js","scripts":{"start":"node backend/server.js"},"dependencies":{"cors":"^2.8.5","dotenv":"^16.4.5","express":"^4.19.2","mongoose":"^8.3.4","nodemailer":"^6.9.13","razorpay":"^2.9.3"},"engines":{"node":">=18.0.0"}}
