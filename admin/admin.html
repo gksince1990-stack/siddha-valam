@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — சித்த வளம்</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil&family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--forest:#1E3A1E;--forest2:#2D5A2D;--saffron:#C8762A;--saffron-lt:#FDF0DC;--cream:#FAF7F0;--text:#1C1208;--muted:#7A6550;--border:#E2D5C0;--white:#FFFFFF;--sidebar:#1E3A1E;}
+body{font-family:'DM Sans',sans-serif;background:#F4F1EB;color:var(--text);display:flex;min-height:100vh}
+
+/* LOGIN */
+.login-wrap{position:fixed;inset:0;background:var(--cream);display:flex;align-items:center;justify-content:center;z-index:1000}
+.login-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:2.5rem;width:360px;text-align:center}
+.login-card h2{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--forest);margin-bottom:0.5rem}
+.login-card p{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
+.login-input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:'DM Sans',sans-serif;margin-bottom:0.75rem;outline:none}
+.login-input:focus{border-color:var(--forest)}
+.login-btn{width:100%;background:var(--forest);color:white;border:none;padding:13px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:0.25rem}
+.login-btn:hover{background:var(--forest2)}
+.login-err{color:#B85000;font-size:13px;margin-top:0.5rem;display:none}
+
+/* SIDEBAR */
+.sidebar{width:230px;background:var(--sidebar);min-height:100vh;flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0}
+.sidebar-logo{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-logo .t{font-family:'Tiro Tamil',serif;font-size:18px;color:white}
+.sidebar-logo .e{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.sidebar-logo .badge{font-size:10px;background:var(--saffron);color:white;padding:2px 8px;border-radius:10px;margin-top:6px;display:inline-block}
+nav.side{flex:1;padding:1rem 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 1.5rem;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.2s;font-size:14px;border-left:3px solid transparent}
+.nav-item:hover{color:white;background:rgba(255,255,255,0.06)}
+.nav-item.active{color:white;background:rgba(255,255,255,0.1);border-left-color:var(--saffron)}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-bottom{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.1)}
+.logout-btn{background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);padding:8px 14px;border-radius:4px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;transition:all 0.2s}
+.logout-btn:hover{color:white;border-color:rgba(255,255,255,0.5)}
+
+/* MAIN */
+.main{margin-left:230px;flex:1;padding:2rem;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest)}
+.topbar-right{display:flex;align-items:center;gap:1rem;font-size:13px;color:var(--muted)}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.stat-label{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:0.3px}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--forest)}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.stat-trend{font-size:12px;color:#2D8A2D;font-weight:500}
+
+/* TABLE */
+.table-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.table-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.table-header h3{font-size:15px;font-weight:500;color:var(--text)}
+.search-input{padding:8px 14px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;width:240px}
+.search-input:focus{border-color:var(--forest)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:11px 1.5rem;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;background:#FAFAF7;border-bottom:1px solid var(--border)}
+td{padding:13px 1.5rem;font-size:13px;border-bottom:1px solid var(--border);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAF7}
+.status-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;display:inline-block}
+.status-pending{background:#FDF0DC;color:var(--bark)}
+.status-processing{background:#E6F1FB;color:#185FA5}
+.status-shipped{background:#EDF5E8;color:var(--forest)}
+.status-delivered{background:#EDF5E8;color:var(--forest);border:1px solid #C0DD97}
+.status-cancelled{background:#FCF0F0;color:#A32D2D}
+.action-btn{background:none;border:1px solid var(--border);padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;color:var(--muted)}
+.action-btn:hover{border-color:var(--forest);color:var(--forest)}
+
+/* PRODUCTS TABLE */
+.img-cell{font-size:24px;width:40px;height:40px;background:var(--saffron-lt);border-radius:6px;display:flex;align-items:center;justify-content:center}
+
+/* SECTION */
+.section-hidden{display:none}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:400;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:12px;padding:2rem;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest);margin-bottom:1.25rem}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none}
+.form-group input:focus,.form-group select:focus{border-color:var(--forest)}
+.modal-btns{display:flex;gap:0.75rem;margin-top:1.25rem}
+.save-btn{flex:1;background:var(--forest);color:white;border:none;padding:12px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.cancel-btn{background:var(--cream);color:var(--muted);border:1px solid var(--border);padding:12px 18px;border-radius:6px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* STATUS UPDATE */
+.status-select{padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;color:var(--text)}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--forest);color:white;padding:12px 20px;border-radius:6px;font-size:14px;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none}
+.toast.show{opacity:1}
+
+@media(max-width:768px){.sidebar{width:60px}.sidebar-logo .t,.sidebar-logo .e,.sidebar-logo .badge,.nav-item span,.sidebar-bottom .logout-btn{display:none}.main{margin-left:60px}.stat-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div style="font-size:40px;margin-bottom:1rem">🌿</div>
+    <h2>சித்த வளம் Admin</h2>
+    <p>Login to manage your store</p>
+    <input class="login-input" type="text" id="loginUser" placeholder="Username (admin)">
+    <input class="login-input" type="password" id="loginPass" placeholder="Password">
+    <button class="login-btn" onclick="doLogin()">Login →</button>
+    <div class="login-err" id="loginErr">Wrong username or password</div>
+    <p style="font-size:11px;color:var(--muted);margin-top:1rem">Default: admin / siddha2024</p>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="t">சித்த வளம்</div>
+    <div class="e">Admin Panel</div>
+    <div class="badge">● Live</div>
+  </div>
+  <nav class="side">
+    <div class="nav-item active" onclick="showSection('dashboard')"><span class="nav-icon">📊</span><span>Dashboard</span></div>
+    <div class="nav-item" onclick="showSection('orders')"><span class="nav-icon">📦</span><span>Orders</span></div>
+    <div class="nav-item" onclick="showSection('products')"><span class="nav-icon">🌿</span><span>Products</span></div>
+    <div class="nav-item" onclick="showSection('customers')"><span class="nav-icon">👥</span><span>Customers</span></div>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="logout-btn" onclick="doLogout()">Logout</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-right">
+      <span id="liveClock"></span>
+      <span>👤 Admin</span>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="sec-dashboard">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value" id="statRevenue">₹0</div><div class="stat-sub stat-trend" id="statRevTrend">Loading...</div></div>
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="statOrders">0</div><div class="stat-sub" id="statOrderSub">Loading...</div></div>
+      <div class="stat-card"><div class="stat-label">Pending Orders</div><div class="stat-value" id="statPending">0</div><div class="stat-sub">Need attention</div></div>
+      <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-value" id="statCustomers">0</div><div class="stat-sub">Registered</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><h3>Recent Orders</h3><a href="#" onclick="showSection('orders')" style="font-size:13px;color:var(--saffron);text-decoration:none">View All →</a></div>
+      <table><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody id="recentOrders"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Loading orders...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div id="sec-orders" class="section-hidden">
+    <div class="table-card">
+      <div class="table-header">
+        <h3>All Orders</h3>
+        <input class="search-input" placeholder="Search by name or order ID..." oninput="searchOrders(this.value)">
+      </div>
+      <table><thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>City</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+      <tbody id="allOrdersTable"><tr><td colspan="9" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div id="sec-products" class="section-hidden">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+      <button class="save-btn" style="width:auto;padding:10px 20px" onclick="openProductModal()">+ Add New Product</button>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><h3>All Products</h3></div>
+      <table><thead><tr><th></th><th>Name</th><th>Tamil Name</th><th>Category</th><th>Price</th><th>Old Price</th><th>Badge</th><th>Action</th></tr></thead>
+      <tbody id="productsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div id="sec-customers" class="section-hidden">
+    <div class="table-card">
+      <div class="table-header"><h3>All Customers</h3></div>
+      <table><thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>City</th><th>Orders</th><th>Total Spent</th></tr></thead>
+      <tbody id="customersTable"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Loading customers...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <h3 id="modalTitle">Add New Product</h3>
+    <div class="form-group"><label>Product Name (English) *</label><input type="text" id="pName" placeholder="Brahmi Hair Oil"></div>
+    <div class="form-group"><label>Tamil Name *</label><input type="text" id="pTamil" placeholder="பிரம்மி தலை எண்ணெய்"></div>
+    <div class="form-group"><label>Category *</label>
+      <select id="pCat">
+        <option value="Oils">Herbal Oils</option>
+        <option value="Churna">Churna & Powder</option>
+        <option value="Kadha">Kadha & Tea</option>
+        <option value="Skin">Skin & Beauty</option>
+        <option value="Ghee">Herbal Ghee</option>
+        <option value="Immunity">Immunity</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Description *</label><textarea id="pDesc" placeholder="Product description..." rows="2"></textarea></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form-group"><label>Price (₹) *</label><input type="number" id="pPrice" placeholder="299"></div>
+      <div class="form-group"><label>Old Price (₹)</label><input type="number" id="pOldPrice" placeholder="399 (optional)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form-group"><label>Emoji Icon *</label><input type="text" id="pEmoji" placeholder="🫙"></div>
+      <div class="form-group"><label>Badge</label>
+        <select id="pBadge"><option value="">None</option><option value="best">Bestseller</option><option value="new">New</option><option value="sale">Sale</option></select>
+      </div>
+    </div>
+    <!-- ADD NEW FIELDS HERE EASILY -->
+    <div class="form-group"><label>Weight / Volume</label><input type="text" id="pWeight" placeholder="100ml or 250g (optional)"></div>
+    <div class="form-group"><label>Stock Quantity</label><input type="number" id="pStock" placeholder="50"></div>
+    <div class="modal-btns">
+      <button class="cancel-btn" onclick="closeProductModal()">Cancel</button>
+      <button class="save-btn" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── AUTH ───────────────────────────────────────────────
+const ADMIN_USER='admin', ADMIN_PASS='siddha2024';
+function doLogin(){
+  const u=document.getElementById('loginUser').value;
+  const p=document.getElementById('loginPass').value;
+  if(u===ADMIN_USER&&p===ADMIN_PASS){
+    document.getElementById('loginWrap').style.display='none';
+    sessionStorage.setItem('sv_admin','1');
+    loadData();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+  }
+}
+function doLogout(){sessionStorage.removeItem('sv_admin');location.reload();}
+window.onload=()=>{if(sessionStorage.getItem('sv_admin')){document.getElementById('loginWrap').style.display='none';loadData();}};
+document.getElementById('loginPass').addEventListener('keyup',e=>{if(e.key==='Enter')doLogin();});
+
+// ─── CLOCK ───────────────────────────────────────────────
+setInterval(()=>{
+  const now=new Date();
+  document.getElementById('liveClock').textContent=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+},1000);
+
+// ─── SAMPLE DATA (replace with API calls) ────────────────
+let ORDERS=[
+  {id:'SV001',customer:'Rajan Kumar',phone:'9876543210',email:'rajan@gmail.com',city:'Chennai',items:[{name:'Brahmi Hair Oil',qty:2,price:299}],total:598,payment:'Razorpay',status:'delivered',date:'2026-03-28'},
+  {id:'SV002',customer:'Priya S',phone:'9876500001',email:'priya@gmail.com',city:'Madurai',items:[{name:'Triphala Churna',qty:1,price:180}],total:240,payment:'COD',status:'shipped',date:'2026-03-29'},
+  {id:'SV003',customer:'Anitha K',phone:'9876500002',email:'anitha@gmail.com',city:'Coimbatore',items:[{name:'Tulsi Kadha',qty:3,price:149}],total:447,payment:'UPI',status:'processing',date:'2026-03-30'},
+  {id:'SV004',customer:'Suresh M',phone:'9876500003',email:'suresh@gmail.com',city:'Salem',items:[{name:'Ashwagandha Churna',qty:1,price:220}],total:280,payment:'COD',status:'pending',date:'2026-03-31'},
+  {id:'SV005',customer:'Kavitha R',phone:'9876500004',email:'kavitha@gmail.com',city:'Trichy',items:[{name:'Kumkumadi Tailam',qty:1,price:549}],total:609,payment:'Razorpay',status:'pending',date:'2026-04-01'},
+];
+
+let PRODUCTS=[
+  {id:1,name:'Brahmi Hair Oil',tamil:'பிரம்மி தலை எண்ணெய்',cat:'Oils',emoji:'🫙',desc:'Cold-pressed with Brahmi & Bhringraj',price:299,oldPrice:399,badge:'best',stock:45,weight:'100ml'},
+  {id:2,name:'Triphala Churna',tamil:'திரிபலா சூரணம்',cat:'Churna',emoji:'🌾',desc:'Classic 3-fruit blend for digestion',price:180,oldPrice:null,badge:'new',stock:80,weight:'250g'},
+  {id:3,name:'Tulsi Kadha Mix',tamil:'துளசி கஷாயம்',cat:'Kadha',emoji:'🍵',desc:'Immunity-boosting herbal kadha',price:149,oldPrice:199,badge:'sale',stock:62,weight:'100g'},
+  {id:4,name:'Kumkumadi Tailam',tamil:'குங்குமாதி தைலம்',cat:'Skin',emoji:'✨',desc:'Luxurious saffron face oil',price:549,oldPrice:699,badge:'best',stock:20,weight:'50ml'},
+  {id:5,name:'Ashwagandha Churna',tamil:'அஸ்வகந்தா சூரணம்',cat:'Immunity',emoji:'🛡️',desc:'Pure root powder for strength',price:220,oldPrice:null,badge:'new',stock:55,weight:'200g'},
+];
+
+let CUSTOMERS=[];
+
+// ─── LOAD DATA ───────────────────────────────────────────
+async function loadData(){
+  try{
+    // Try to load from backend API
+    const [oRes,pRes]=await Promise.allSettled([
+      fetch('/api/orders').then(r=>r.json()),
+      fetch('/api/products').then(r=>r.json())
+    ]);
+    if(oRes.status==='fulfilled'&&oRes.value.success){ORDERS=oRes.value.data;}
+    if(pRes.status==='fulfilled'&&pRes.value.success){PRODUCTS=pRes.value.data;}
+  }catch(e){/* use sample data */}
+  buildCustomers();
+  renderDashboard();
+  renderOrders();
+  renderProducts();
+  renderCustomers();
+}
+
+function buildCustomers(){
+  const map={};
+  ORDERS.forEach(o=>{
+    if(!map[o.email]){map[o.email]={name:o.customer,phone:o.phone,email:o.email,city:o.city,orders:0,spent:0};}
+    map[o.email].orders++;
+    map[o.email].spent+=o.total;
+  });
+  CUSTOMERS=Object.values(map);
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────
+function renderDashboard(){
+  const revenue=ORDERS.filter(o=>o.status!=='cancelled').reduce((s,o)=>s+o.total,0);
+  const pending=ORDERS.filter(o=>o.status==='pending').length;
+  document.getElementById('statRevenue').textContent=`₹${revenue.toLocaleString('en-IN')}`;
+  document.getElementById('statOrders').textContent=ORDERS.length;
+  document.getElementById('statPending').textContent=pending;
+  document.getElementById('statCustomers').textContent=CUSTOMERS.length;
+  document.getElementById('statRevTrend').textContent=`From ${ORDERS.length} orders`;
+  document.getElementById('statOrderSub').textContent=`${pending} pending`;
+  const recent=ORDERS.slice(-5).reverse();
+  document.getElementById('recentOrders').innerHTML=recent.map(o=>`
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.customer}</td>
+      <td>${o.items.length} item(s)</td>
+      <td>₹${o.total}</td>
+      <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+      <td>${o.date}</td>
+    </tr>`).join('');
+}
+
+// ─── ORDERS ──────────────────────────────────────────────
+function renderOrders(list=ORDERS){
+  document.getElementById('allOrdersTable').innerHTML=list.map(o=>`
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.customer}</td>
+      <td>${o.phone}</td>
+      <td>${o.city}</td>
+      <td>₹${o.total}</td>
+      <td>${o.payment}</td>
+      <td>
+        <select class="status-select" onchange="updateStatus('${o.id}',this.value)">
+          ${['pending','processing','shipped','delivered','cancelled'].map(s=>`<option value="${s}"${o.status===s?' selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td>${o.date}</td>
+      <td><button class="action-btn" onclick="viewOrder('${o.id}')">View</button></td>
+    </tr>`).join('');
+}
+
+function searchOrders(q){
+  const filtered=ORDERS.filter(o=>o.customer.toLowerCase().includes(q.toLowerCase())||o.id.toLowerCase().includes(q.toLowerCase()));
+  renderOrders(filtered);
+}
+
+async function updateStatus(id,status){
+  const o=ORDERS.find(x=>x.id===id);
+  if(o){o.status=status;}
+  try{await fetch(`/api/orders/${id}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});}catch(e){}
+  renderDashboard();
+  showToast(`Order ${id} updated to "${status}" ✓`);
+}
+
+function viewOrder(id){
+  const o=ORDERS.find(x=>x.id===id);
+  alert(`Order: ${o.id}\nCustomer: ${o.customer}\nPhone: ${o.phone}\nEmail: ${o.email}\nCity: ${o.city}\nItems: ${o.items.map(i=>i.name+' x'+i.qty).join(', ')}\nTotal: ₹${o.total}\nPayment: ${o.payment}\nStatus: ${o.status}\nDate: ${o.date}`);
+}
+
+// ─── PRODUCTS ────────────────────────────────────────────
+function renderProducts(){
+  document.getElementById('productsTable').innerHTML=PRODUCTS.map(p=>`
+    <tr>
+      <td><div class="img-cell">${p.emoji}</div></td>
+      <td><strong>${p.name}</strong></td>
+      <td style="font-family:'Tiro Tamil',serif">${p.tamil}</td>
+      <td>${p.cat}</td>
+      <td>₹${p.price}</td>
+      <td>${p.oldPrice?'₹'+p.oldPrice:'—'}</td>
+      <td>${p.badge||'—'}</td>
+      <td>
+        <button class="action-btn" onclick="editProduct(${p.id})" style="margin-right:4px">Edit</button>
+        <button class="action-btn" onclick="deleteProduct(${p.id})" style="color:#A32D2D;border-color:#F7C1C1">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+let editingId=null;
+function openProductModal(id=null){
+  editingId=id;
+  document.getElementById('modalTitle').textContent=id?'Edit Product':'Add New Product';
+  if(!id){['pName','pTamil','pDesc','pPrice','pOldPrice','pEmoji','pWeight','pStock'].forEach(f=>document.getElementById(f).value='');document.getElementById('pBadge').value='';}
+  document.getElementById('productModal').classList.add('open');
+}
+function closeProductModal(){document.getElementById('productModal').classList.remove('open');}
+function editProduct(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  document.getElementById('pName').value=p.name;
+  document.getElementById('pTamil').value=p.tamil;
+  document.getElementById('pCat').value=p.cat;
+  document.getElementById('pDesc').value=p.desc;
+  document.getElementById('pPrice').value=p.price;
+  document.getElementById('pOldPrice').value=p.oldPrice||'';
+  document.getElementById('pEmoji').value=p.emoji;
+  document.getElementById('pBadge').value=p.badge||'';
+  document.getElementById('pWeight').value=p.weight||'';
+  document.getElementById('pStock').value=p.stock||'';
+  openProductModal(id);
+}
+async function saveProduct(){
+  const data={
+    name:document.getElementById('pName').value,
+    tamil:document.getElementById('pTamil').value,
+    cat:document.getElementById('pCat').value,
+    desc:document.getElementById('pDesc').value,
+    price:parseInt(document.getElementById('pPrice').value),
+    oldPrice:parseInt(document.getElementById('pOldPrice').value)||null,
+    emoji:document.getElementById('pEmoji').value,
+    badge:document.getElementById('pBadge').value||null,
+    weight:document.getElementById('pWeight').value,
+    stock:parseInt(document.getElementById('pStock').value)||0,
+  };
+  if(!data.name||!data.price){showToast('Please fill required fields');return;}
+  if(editingId){
+    const idx=PRODUCTS.findIndex(x=>x.id===editingId);
+    PRODUCTS[idx]={...PRODUCTS[idx],...data};
+    try{await fetch(`/api/products/${editingId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});}catch(e){}
+    showToast('Product updated ✓');
+  } else {
+    const newP={id:Date.now(),...data,rating:4.5,reviews:0};
+    PRODUCTS.push(newP);
+    try{await fetch('/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(newP)});}catch(e){}
+    showToast('Product added ✓');
+  }
+  renderProducts();
+  closeProductModal();
+}
+async function deleteProduct(id){
+  if(!confirm('Delete this product?'))return;
+  PRODUCTS=PRODUCTS.filter(x=>x.id!==id);
+  try{await fetch(`/api/products/${id}`,{method:'DELETE'});}catch(e){}
+  renderProducts();
+  showToast('Product deleted');
+}
+
+// ─── CUSTOMERS ───────────────────────────────────────────
+function renderCustomers(){
+  document.getElementById('customersTable').innerHTML=CUSTOMERS.length?CUSTOMERS.map(c=>`
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.phone}</td>
+      <td>${c.email}</td>
+      <td>${c.city}</td>
+      <td>${c.orders}</td>
+      <td>₹${c.spent}</td>
+    </tr>`).join(''):`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No customers yet</td></tr>`;
+}
+
+// ─── NAV ─────────────────────────────────────────────────
+const TITLES={dashboard:'Dashboard',orders:'All Orders',products:'Products',customers:'Customers'};
+function showSection(name){
+  ['dashboard','orders','products','customers'].forEach(s=>{
+    document.getElementById('sec-'+s).classList.toggle('section-hidden',s!==name);
+  });
+  document.querySelectorAll('.nav-item').forEach((el,i)=>{
+    el.classList.toggle('active',['dashboard','orders','products','customers'][i]===name);
+  });
+  document.getElementById('pageTitle').textContent=TITLES[name];
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+</script>
+</body>
+</html>

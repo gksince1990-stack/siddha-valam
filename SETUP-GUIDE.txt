@@ -1,0 +1,200 @@
+# சித்த வளம் — Complete Setup Guide
+# Follow these steps ONE BY ONE. You can do this! 🌿
+
+═══════════════════════════════════════════════════
+ FOLDER STRUCTURE (what I built for you)
+═══════════════════════════════════════════════════
+
+siddha-valam/
+├── frontend/
+│   ├── index.html          ← Your main shop page
+│   ├── checkout.html       ← Checkout + payment page
+│   └── order-success.html  ← Order confirmed page
+├── backend/
+│   ├── server.js           ← All backend logic
+│   ├── package.json        ← Dependencies list
+│   └── .env.example        ← Your secret keys (copy as .env)
+├── admin/
+│   └── admin.html          ← Your admin panel (only you see this)
+└── SETUP-GUIDE.txt         ← This file
+
+
+═══════════════════════════════════════════════════
+ STEP 1 — INSTALL NODE.JS (One time only)
+═══════════════════════════════════════════════════
+
+1. Go to: https://nodejs.org
+2. Click "Download LTS" (green button)
+3. Install it like a normal software
+4. To check: open Command Prompt → type: node --version
+   You should see: v20.x.x  ← means it worked!
+
+
+═══════════════════════════════════════════════════
+ STEP 2 — SETUP MONGODB (Free Database)
+═══════════════════════════════════════════════════
+
+1. Go to: https://mongodb.com/atlas
+2. Click "Try Free" → Sign up
+3. Choose FREE tier (M0 Sandbox)
+4. Choose region: Mumbai (ap-south-1)
+5. Click "Create Cluster"
+6. Click "Connect" → "Drivers"
+7. Copy the connection string. It looks like:
+   mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/
+8. Replace <password> with your actual password
+9. Open backend/.env.example
+10. Copy it as backend/.env
+11. Paste your connection string as MONGO_URI value
+
+
+═══════════════════════════════════════════════════
+ STEP 3 — SETUP RAZORPAY (Payment Gateway)
+═══════════════════════════════════════════════════
+
+1. Go to: https://razorpay.com
+2. Click "Sign Up" → Fill your details
+3. Add your business info and bank account
+4. Go to: Settings → API Keys → Generate Test Key
+5. Copy Key ID and Key Secret
+6. Paste them in backend/.env:
+   RAZORPAY_KEY_ID=rzp_test_xxxx
+   RAZORPAY_KEY_SECRET=xxxxx
+7. Also paste the Key ID in frontend/checkout.html
+   Find line: key: 'YOUR_RAZORPAY_KEY_ID',
+   Replace with your actual key
+
+
+═══════════════════════════════════════════════════
+ STEP 4 — RUN YOUR WEBSITE ON YOUR COMPUTER
+═══════════════════════════════════════════════════
+
+1. Open Command Prompt (press Windows key → type cmd → Enter)
+2. Type these commands one by one:
+
+   cd Desktop\siddha-valam\backend
+   npm install
+   node server.js
+
+3. You will see:
+   ✅ MongoDB connected
+   🌿 சித்த வளம் server running at http://localhost:3000
+
+4. Open your browser → go to: http://localhost:3000
+   Your shop is running! 🎉
+
+5. For Admin Panel: http://localhost:3000/admin
+   Username: admin
+   Password: siddha2024 (change this in admin.html)
+
+
+═══════════════════════════════════════════════════
+ STEP 5 — PUT YOUR WEBSITE ONLINE (Railway — Free)
+═══════════════════════════════════════════════════
+
+1. Go to: https://github.com → Sign up (free)
+2. Create a new repository called "siddha-valam"
+3. Upload all your project files there
+
+4. Go to: https://railway.app → Sign up with GitHub
+
+5. Click "New Project" → "Deploy from GitHub repo"
+6. Select your "siddha-valam" repo
+
+7. Click on your project → "Variables" tab
+8. Add these variables (same as your .env file):
+   MONGO_URI = your mongodb connection string
+   RAZORPAY_KEY_ID = your razorpay key
+   RAZORPAY_KEY_SECRET = your razorpay secret
+   PORT = 3000
+
+9. Railway will auto-deploy. You get a free URL like:
+   https://siddha-valam-production.up.railway.app
+
+10. Your shop is LIVE on the internet! 🚀
+
+
+═══════════════════════════════════════════════════
+ STEP 6 — ADD YOUR CUSTOM DOMAIN
+═══════════════════════════════════════════════════
+
+1. Buy domain at: https://hostinger.in (₹800/year)
+   Example: siddha-valam.in or siddha-valam.com
+
+2. In Railway → Settings → Custom Domain
+3. Type your domain → Railway gives you a DNS record
+
+4. In Hostinger → DNS Manager → Add that record
+5. Wait 1-2 hours → Your domain works! 🎉
+
+
+═══════════════════════════════════════════════════
+ HOW TO SEE YOUR ORDERS
+═══════════════════════════════════════════════════
+
+Go to: https://your-site.com/admin
+Username: admin
+Password: siddha2024
+
+You will see:
+✅ Dashboard with total sales, revenue
+✅ All orders with customer details
+✅ Update order status: Pending → Processing → Shipped → Delivered
+✅ Add / Edit / Delete products yourself
+✅ View all customers
+
+
+═══════════════════════════════════════════════════
+ HOW TO ADD A NEW FIELD TO PRODUCTS (By yourself!)
+═══════════════════════════════════════════════════
+
+Example: You want to add "Expiry Date" field
+
+Step 1: Open backend/server.js
+        Find this comment:
+        // ✏️  ADD NEW FIELDS HERE
+        Add below it:
+        expiryDate: { type: String, default: '' },
+
+Step 2: Open admin/admin.html
+        Find the product modal form
+        Add a new input:
+        <div class="form-group">
+          <label>Expiry Date</label>
+          <input type="text" id="pExpiry" placeholder="Dec 2027">
+        </div>
+
+Step 3: In the saveProduct() function, add:
+        expiryDate: document.getElementById('pExpiry').value,
+
+That's it! New field added. No developer needed. 💪
+
+
+═══════════════════════════════════════════════════
+ COSTS SUMMARY
+═══════════════════════════════════════════════════
+
+Domain (siddha-valam.in)    ₹800/year      ← You pay this
+MongoDB Atlas               FREE           ← Free forever
+Railway Hosting             FREE to start  ← Free to start
+Razorpay Setup              FREE           ← Free setup
+Razorpay per order          2% per order   ← Only when you earn
+
+Total first year: ₹800 only
+When business grows → Upgrade Railway: ~₹1,500/month
+
+
+═══════════════════════════════════════════════════
+ NEED HELP? JUST ASK CLAUDE!
+═══════════════════════════════════════════════════
+
+You can always come back to Claude and say:
+- "Add a WhatsApp button to my website"
+- "Add a discount field to my products"
+- "My website is showing an error: [paste error]"
+- "How do I add more products?"
+
+Claude will fix it for you! 🌿
+
+
+Made with 💚 for சித்த வளம்

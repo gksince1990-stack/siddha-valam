@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed — சித்த வளம்</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil&family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--forest:#1E3A1E;--saffron:#C8762A;--cream:#FAF7F0;--text:#1C1208;--muted:#7A6550;--border:#E2D5C0;--white:#FFFFFF;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+nav{position:fixed;top:0;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);padding:0 2.5rem;height:68px;display:flex;align-items:center}
+.logo-tamil{font-family:'Tiro Tamil',serif;font-size:20px;color:var(--forest)}
+.logo-en{font-size:10px;letter-spacing:3px;color:var(--saffron);text-transform:uppercase}
+.success-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:3rem 2.5rem;text-align:center;max-width:480px;width:100%;margin-top:68px}
+.check-circle{width:80px;height:80px;background:#EDF5E8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:36px}
+h1{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--forest);margin-bottom:0.5rem}
+.subtitle{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
+.order-id{background:#EDF5E8;border:1px solid #C0DD97;border-radius:8px;padding:12px 20px;font-size:14px;color:var(--forest);margin-bottom:1.5rem;display:inline-block;font-weight:500}
+.steps{display:flex;gap:0;margin:1.5rem 0;position:relative}
+.steps::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:2px;background:var(--border);z-index:0}
+.step{flex:1;text-align:center;position:relative;z-index:1}
+.step-dot{width:40px;height:40px;border-radius:50%;background:var(--forest);color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:16px}
+.step-dot.inactive{background:var(--border);color:var(--muted)}
+.step-label{font-size:11px;color:var(--muted)}
+.btn-home{display:inline-block;background:var(--forest);color:white;padding:13px 28px;border-radius:4px;text-decoration:none;font-size:14px;font-weight:500;margin-top:1.5rem;transition:background 0.2s}
+.btn-home:hover{background:#2D5A2D}
+</style>
+</head>
+<body>
+<nav>
+  <div><div class="logo-tamil">சித்த வளம்</div><div class="logo-en">Siddha Valam</div></div>
+</nav>
+<div class="success-card">
+  <div class="check-circle">✅</div>
+  <h1>Order Confirmed!</h1>
+  <p class="subtitle">Thank you for your order. We will pack and ship your Siddha products within 24 hours.</p>
+  <div class="order-id" id="orderId">Order #DEMO123</div>
+  <div class="steps">
+    <div class="step"><div class="step-dot">✓</div><div class="step-label">Confirmed</div></div>
+    <div class="step"><div class="step-dot inactive">📦</div><div class="step-label">Packing</div></div>
+    <div class="step"><div class="step-dot inactive">🚚</div><div class="step-label">Shipped</div></div>
+    <div class="step"><div class="step-dot inactive">🏠</div><div class="step-label">Delivered</div></div>
+  </div>
+  <p style="font-size:13px;color:var(--muted)">You will receive a confirmation message on your phone/email shortly.</p>
+  <a href="index.html" class="btn-home">Continue Shopping 🌿</a>
+</div>
+<script>
+const params=new URLSearchParams(window.location.search);
+const id=params.get('id')||'DEMO123';
+document.getElementById('orderId').textContent=`Order #${id}`;
+</script>
+</body>
+</html>
