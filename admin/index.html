@@ -36,6 +36,16 @@ nav.sidenav{flex:1;padding:1rem 0;overflow-y:auto}
 .stat-icon{font-size:28px;margin-bottom:0.75rem}
 .stat-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--forest)}
 .stat-label{font-size:12px;color:var(--muted);margin-top:3px}
+/* PHOTO UPLOAD */
+.photo-upload-area{border:2px dashed var(--border);border-radius:8px;padding:1.25rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;background:#fafaf8}
+.photo-upload-area:hover{border-color:var(--forest);background:rgba(30,58,30,0.03)}
+.photo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-preview{width:90px;height:90px;object-fit:cover;border-radius:6px;margin-bottom:8px;display:none;border:1px solid var(--border)}
+.photo-hint{font-size:12px;color:var(--muted);line-height:1.6}
+.photo-hint strong{color:var(--forest);display:block;font-size:13px;margin-bottom:3px}
+/* CUSTOMER DETAIL */
+.cust-address-card{background:#f8f6f2;border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px}
+.cust-address-card .addr-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 /* TABLE */
 .table-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .table-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem}
@@ -113,7 +123,9 @@ tr:hover td{background:#FAFAF8}
     <button class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</button>
     <button class="nav-item" onclick="showPage('orders',this)"><span class="nav-icon">📦</span> Orders</button>
     <button class="nav-item" onclick="showPage('products',this)"><span class="nav-icon">🌿</span> Products</button>
+    <button class="nav-item" onclick="showPage('customers',this)"><span class="nav-icon">👥</span> Customers</button>
     <button class="nav-item" onclick="showPage('coupons',this)"><span class="nav-icon">🏷️</span> Coupons</button>
+    <button class="nav-item" onclick="showPage('subscribers',this)"><span class="nav-icon">📧</span> Subscribers</button>
   </nav>
   <div class="sidebar-bottom">
     <a href="/" target="_blank">🔗 View Shop</a>
@@ -182,6 +194,35 @@ tr:hover td{background:#FAFAF8}
     </div>
   </div>
 
+  <!-- CUSTOMERS PAGE -->
+  <div id="page-customers" class="page">
+    <div class="topbar">
+      <h1>Customers</h1>
+      <div class="topbar-right">
+        <input type="text" class="search-bar" id="customerSearch" placeholder="Search name, email or phone…" oninput="filterCustomers()">
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:1.5rem">
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num" id="cstTotal">—</div><div class="stat-label">Total Registered</div></div>
+      <div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-num" id="cstBuyers">—</div><div class="stat-label">Have Ordered</div></div>
+      <div class="stat-card"><div class="stat-icon">🆕</div><div class="stat-num" id="cstToday">—</div><div class="stat-label">Joined Today</div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num" id="cstRevenue">—</div><div class="stat-label">Total Revenue</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+      <button id="tab-registered" onclick="switchCustTab('registered')" style="padding:8px 18px;border-radius:20px;border:2px solid var(--forest);background:var(--forest);color:white;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500">Registered Users</button>
+      <button id="tab-orders" onclick="switchCustTab('orders')" style="padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:white;color:var(--muted);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">From Orders</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header"><h3 id="custTableTitle">Registered Users</h3><span id="customerCount" style="font-size:13px;color:var(--muted)"></span></div>
+      <div id="customersTable"><div class="table-loading">Loading customers…</div></div>
+    </div>
+  </div>
+
   <!-- COUPONS PAGE -->
   <div id="page-coupons" class="page">
     <div class="topbar">
@@ -194,6 +235,77 @@ tr:hover td{background:#FAFAF8}
     </div>
   </div>
 
+  <!-- SUBSCRIBERS PAGE -->
+  <div id="page-subscribers" class="page">
+    <div class="topbar">
+      <h1>Subscribers</h1>
+      <button class="add-btn-top" onclick="openBlastModal()" style="background:var(--saffron)">📬 Send Announcement</button>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem">
+      <div class="stat-card">
+        <div class="stat-icon">📧</div>
+        <div class="stat-num" id="subTotal">—</div>
+        <div class="stat-label">Total Subscribers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-num" id="subActive">—</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-num" id="subToday">—</div>
+        <div class="stat-label">Joined Today</div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Subscriber List</h3>
+        <input class="search-bar" placeholder="Search email…" oninput="filterSubscribers(this.value)">
+      </div>
+      <div id="subscribersTable"><div class="table-loading">Loading…</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BLAST MODAL -->
+<div class="modal-backdrop" id="blastModal">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-head">
+      <h3>📬 Send Announcement</h3>
+      <button onclick="closeModal('blastModal')" style="border:none;background:none;font-size:18px;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Email Subject *</label>
+        <input type="text" id="blastSubject" placeholder="e.g. New Product Launch! 🌿">
+      </div>
+      <div class="form-group">
+        <label>Message *</label>
+        <textarea id="blastMessage" rows="5" placeholder="Write your announcement here…" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;resize:vertical"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Product / Promo Image URL (optional)</label>
+        <input type="text" id="blastImageUrl" placeholder="https://… or leave blank">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Paste a public image URL to include in the email</div>
+      </div>
+      <div id="blastPreviewImg" style="display:none;margin-bottom:1rem">
+        <img id="blastPreviewImgEl" src="" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">
+      </div>
+      <div style="background:#FFF9C4;border:1px solid #F9E04B;border-radius:6px;padding:10px 14px;font-size:12px;color:#7a5c00;margin-bottom:1rem" id="smtpNote">
+        ⚠️ SMTP not configured — email will be previewed in console. Add <strong>SMTP_USER</strong> and <strong>SMTP_PASS</strong> to .env to send real emails.
+      </div>
+      <div id="blastResult" style="display:none;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('blastModal')">Cancel</button>
+      <button class="btn-save" id="blastSendBtn" onclick="sendBlast()" style="background:var(--saffron)">Send to All Subscribers →</button>
+    </div>
+  </div>
 </div>
 
 <!-- ORDER STATUS MODAL -->
@@ -239,6 +351,18 @@ tr:hover td{background:#FAFAF8}
         <div class="form-group"><label>Product Name *</label><input type="text" id="pName" placeholder="Brahmi Hair Oil"></div>
         <div class="form-group"><label>Tamil Name</label><input type="text" id="pTamil" placeholder="பிரம்மி தலை எண்ணெய்"></div>
       </div>
+      <div class="form-group">
+        <label>Product Photo</label>
+        <div class="photo-upload-area" id="photoUploadArea">
+          <input type="file" id="pImageFile" accept="image/*" onchange="previewProductPhoto(this)">
+          <img id="pImagePreview" class="photo-preview" src="" alt="Preview">
+          <div class="photo-hint">
+            <strong>📷 Click to upload product photo</strong>
+            JPG, PNG, WebP — max 5 MB
+          </div>
+        </div>
+        <input type="hidden" id="pImageFilename">
+      </div>
       <div class="form-row">
         <div class="form-group">
           <label>Category *</label>
@@ -248,7 +372,7 @@ tr:hover td{background:#FAFAF8}
             <option>Skin</option><option>Ghee</option><option>Immunity</option>
           </select>
         </div>
-        <div class="form-group"><label>Emoji Icon</label><input type="text" id="pEmoji" placeholder="🫙" maxlength="4"></div>
+        <div class="form-group"><label>Emoji (fallback if no photo)</label><input type="text" id="pEmoji" placeholder="🫙" maxlength="4"></div>
       </div>
       <div class="form-group"><label>Description *</label><textarea id="pDesc" placeholder="Brief product description…"></textarea></div>
       <div class="form-group"><label>Ingredients</label><textarea id="pIngredients" placeholder="Brahmi, Bhringraj, Coconut Oil…"></textarea></div>
@@ -321,15 +445,31 @@ tr:hover td{background:#FAFAF8}
   </div>
 </div>
 
+<!-- CUSTOMER DETAIL MODAL -->
+<div class="modal-backdrop" id="customerModal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-head">
+      <h3 id="customerModalTitle">Customer Details</h3>
+      <button class="btn-cancel" onclick="closeModal('customerModal')" style="border:none;padding:0;font-size:18px">✕</button>
+    </div>
+    <div class="modal-body" id="customerModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('customerModal')">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // ─── STATE ────────────────────────────────────────
-let allOrders = [];
-let allProducts = [];
-let allCoupons = [];
+let allOrders    = [];
+let allProducts  = [];
+let allCoupons   = [];
+let allCustomers = [];
 let editingProductId = null;
-let editingOrderId = null;
+let editingOrderId   = null;
+let editingImageFilename = null;
 
 // ─── INIT ─────────────────────────────────────────
 document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
@@ -340,47 +480,44 @@ function showPage(page, btn) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   if (btn) btn.classList.add('active');
-  if (page === 'orders') loadOrders();
-  if (page === 'products') loadProducts();
-  if (page === 'coupons') loadCoupons();
+  if (page === 'orders')    loadOrders();
+  if (page === 'products')  loadProducts();
+  if (page === 'customers') loadCustomers();
+  if (page === 'coupons')      loadCoupons();
+  if (page === 'subscribers')  loadSubscribers();
 }
 
-function showToast(msg) {
+function showToast(msg, duration) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  setTimeout(() => t.classList.remove('show'), duration || 5000);
 }
-
-function openModal(id) { document.getElementById(id).classList.add('open'); }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-// ─── STATUS BADGE ─────────────────────────────────
-function statusBadge(s) {
-  return `<span class="status-badge s-${s}">${s}</span>`;
-}
+// ─── STATUS BADGES ────────────────────────────────
+function statusBadge(s) { return `<span class="status-badge s-${s}">${s}</span>`; }
 function payBadge(s) {
-  const cls = s === 'paid' ? 'pay-paid' : s === 'COD' ? 'pay-cod' : 'pay-pending';
-  return `<span class="pay-badge ${cls}">${s}</span>`;
+  const cls = s==='paid'?'pay-paid': s==='COD'||s==='sandbox-test'?'pay-cod':'pay-pending';
+  const label = s==='sandbox-test'?'Test':s;
+  return `<span class="pay-badge ${cls}">${label}</span>`;
 }
 
 // ─── DASHBOARD ────────────────────────────────────
 async function loadDashboard() {
   try {
-    const res = await fetch('/api/stats');
+    const res  = await fetch('/api/stats');
     const data = await res.json();
     if (data.success) {
       const d = data.data;
-      document.getElementById('sOrders').textContent = d.totalOrders;
-      document.getElementById('sRevenue').textContent = '₹' + (d.totalRevenue || 0).toLocaleString('en-IN');
+      document.getElementById('sOrders').textContent   = d.totalOrders;
+      document.getElementById('sRevenue').textContent  = '₹' + (d.totalRevenue||0).toLocaleString('en-IN');
       document.getElementById('sProducts').textContent = d.totalProducts;
-      document.getElementById('sPending').textContent = d.pendingOrders;
-      renderRecentOrders(d.recentOrders || []);
+      document.getElementById('sPending').textContent  = d.pendingOrders;
+      renderRecentOrders(d.recentOrders||[]);
     }
-  } catch (e) {
-    document.getElementById('sOrders').textContent = '—';
-    document.getElementById('sRevenue').textContent = '—';
-    document.getElementById('sProducts').textContent = '—';
-    document.getElementById('sPending').textContent = '—';
+  } catch(e) {
+    ['sOrders','sRevenue','sProducts','sPending'].forEach(id => document.getElementById(id).textContent = '—');
     document.getElementById('recentOrdersTable').innerHTML = '<div class="table-empty">Connect backend to see data</div>';
   }
 }
@@ -390,38 +527,37 @@ function renderRecentOrders(orders) {
   if (!orders.length) { el.innerHTML = '<div class="table-empty">No orders yet</div>'; return; }
   el.innerHTML = `<table>
     <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
-    <tbody>
-      ${orders.map(o => `<tr>
-        <td><strong>${o.orderId}</strong></td>
-        <td>${o.customer?.name || '—'}</td>
-        <td><strong>₹${o.total}</strong></td>
-        <td>${statusBadge(o.status)}</td>
-        <td>${new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
-      </tr>`).join('')}
-    </tbody></table>`;
+    <tbody>${orders.map(o=>`<tr>
+      <td><strong>${o.orderId}</strong></td>
+      <td>${o.customer?.name||'—'}</td>
+      <td><strong>₹${o.total}</strong></td>
+      <td>${statusBadge(o.status)}</td>
+      <td>${new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
+    </tr>`).join('')}</tbody></table>`;
 }
 
 // ─── ORDERS ───────────────────────────────────────
 async function loadOrders() {
-  const status = document.getElementById('orderFilter')?.value || '';
-  const url = '/api/orders' + (status ? '?status=' + status : '');
   try {
-    const res = await fetch(url);
+    const res  = await fetch('/api/orders');
     const data = await res.json();
-    if (data.success) { allOrders = data.data; renderOrders(allOrders); }
-  } catch (e) {
+    if (data.success) {
+      allOrders = data.data;
+      const f = document.getElementById('orderFilter')?.value;
+      renderOrders(f ? allOrders.filter(o=>o.status===f) : allOrders);
+    }
+  } catch(e) {
     document.getElementById('ordersTable').innerHTML = '<div class="table-empty">Could not load orders. Is the backend running?</div>';
   }
 }
 
 function filterOrders() {
   const q = document.getElementById('orderSearch').value.toLowerCase();
-  const filtered = allOrders.filter(o =>
+  renderOrders(allOrders.filter(o =>
     o.orderId?.toLowerCase().includes(q) ||
     o.customer?.name?.toLowerCase().includes(q) ||
     o.customer?.phone?.includes(q)
-  );
-  renderOrders(filtered);
+  ));
 }
 
 function renderOrders(orders) {
@@ -429,58 +565,54 @@ function renderOrders(orders) {
   if (!orders.length) { el.innerHTML = '<div class="table-empty">No orders found</div>'; return; }
   el.innerHTML = `<table>
     <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-    <tbody>
-      ${orders.map(o => `<tr>
-        <td><strong>${o.orderId}</strong></td>
-        <td><div style="font-weight:500">${o.customer?.name||'—'}</div><div style="font-size:11px;color:var(--muted)">${o.customer?.phone||''}</div></td>
-        <td style="color:var(--muted)">${o.items?.length || 0} item(s)</td>
-        <td><strong>₹${o.total}</strong></td>
-        <td>${payBadge(o.paymentStatus)}</td>
-        <td>${statusBadge(o.status)}</td>
-        <td style="white-space:nowrap;font-size:12px;color:var(--muted)">${new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
-        <td><button class="action-btn" onclick="openOrderModal('${o.orderId}','${o.status}','${o.trackingNumber||''}')">Update</button></td>
-      </tr>`).join('')}
-    </tbody></table>`;
+    <tbody>${orders.map(o=>`<tr>
+      <td><strong>${o.orderId}</strong></td>
+      <td>
+        <div style="font-weight:500">${o.customer?.name||'—'}</div>
+        <div style="font-size:11px;color:var(--muted)">${o.customer?.phone||''}</div>
+      </td>
+      <td style="color:var(--muted)">${o.items?.length||0} item(s)</td>
+      <td><strong>₹${o.total}</strong></td>
+      <td>${payBadge(o.paymentStatus)}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td style="white-space:nowrap;font-size:12px;color:var(--muted)">${new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
+      <td><button class="action-btn" onclick="openOrderModal('${o.orderId}','${o.status}','${o.trackingNumber||''}')">Update</button></td>
+    </tr>`).join('')}</tbody></table>`;
 }
 
 function openOrderModal(orderId, status, tracking) {
   editingOrderId = orderId;
-  document.getElementById('oStatus').value = status;
-  document.getElementById('oTracking').value = tracking || '';
-  const o = allOrders.find(x => x.orderId === orderId);
+  document.getElementById('oStatus').value   = status;
+  document.getElementById('oTracking').value = tracking||'';
+  const o = allOrders.find(x=>x.orderId===orderId);
   if (o) {
-    document.getElementById('orderDetail').innerHTML = `
-      <strong>${o.orderId}</strong> — ${o.customer?.name} — ₹${o.total}<br>
-      <span style="font-size:11px">${o.customer?.address?.street}, ${o.customer?.address?.city}</span>`;
+    document.getElementById('orderDetail').innerHTML =
+      `<strong>${o.orderId}</strong> — ${o.customer?.name} — ₹${o.total}<br>
+       <span style="font-size:11px">${o.customer?.address?.street||''}, ${o.customer?.address?.city||''}</span>`;
   }
   openModal('orderModal');
 }
 
 async function saveOrderStatus() {
-  const status = document.getElementById('oStatus').value;
+  const status        = document.getElementById('oStatus').value;
   const trackingNumber = document.getElementById('oTracking').value.trim();
   try {
-    const res = await fetch(`/api/orders/${editingOrderId}/status`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, trackingNumber })
+    const res  = await fetch(`/api/orders/${editingOrderId}/status`, {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({status, trackingNumber})
     });
     const data = await res.json();
-    if (data.success) {
-      showToast(`Order ${editingOrderId} updated → ${status} ✅`);
-      closeModal('orderModal');
-      loadOrders();
-    }
-  } catch (e) { showToast('Error updating order'); }
+    if (data.success) { showToast(`Order ${editingOrderId} → ${status} ✅`); closeModal('orderModal'); loadOrders(); }
+  } catch(e) { showToast('Error updating order'); }
 }
 
 // ─── PRODUCTS ─────────────────────────────────────
 async function loadProducts() {
   try {
-    const res = await fetch('/api/products');
+    const res  = await fetch('/api/products');
     const data = await res.json();
     if (data.success) { allProducts = data.data; renderProducts(allProducts); }
-  } catch (e) {
+  } catch(e) {
     document.getElementById('productsTable').innerHTML = '<div class="table-empty">Could not load products</div>';
   }
 }
@@ -492,113 +624,346 @@ function filterProducts() {
 
 function renderProducts(products) {
   const el = document.getElementById('productsTable');
-  if (!products.length) { el.innerHTML = '<div class="table-empty">No products found</div>'; return; }
+  if (!products.length) { el.innerHTML = '<div class="table-empty">No products found. Add one!</div>'; return; }
   el.innerHTML = `<table>
-    <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Badge</th><th>Actions</th></tr></thead>
-    <tbody>
-      ${products.map(p => `<tr>
+    <thead><tr><th>Photo</th><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Badge</th><th>Actions</th></tr></thead>
+    <tbody>${products.map(p => {
+      const thumb = p.image
+        ? `<img src="/uploads/${p.image}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">`
+        : `<span style="font-size:28px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#EDF5E8;border-radius:6px">${p.emoji||'🌿'}</span>`;
+      const stockColor = p.stock===0?'#c0392b': p.stock<=10?'#e67e22':'var(--text)';
+      const stockLabel = p.stock===0?'Out of Stock': p.stock<=10?`⚠️ ${p.stock} left`:p.stock;
+      return `<tr>
+        <td>${thumb}</td>
         <td>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:24px">${p.emoji}</span>
-            <div>
-              <div style="font-weight:500">${p.name}</div>
-              <div style="font-size:11px;color:var(--muted)">${p.tamil||''}</div>
-            </div>
-          </div>
+          <div style="font-weight:500">${p.name}</div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Tiro Tamil',serif">${p.tamil||''}</div>
         </td>
         <td><span style="font-size:11px;background:#E8F5E8;color:var(--forest);padding:3px 8px;border-radius:3px">${p.cat}</span></td>
         <td><strong>₹${p.price}</strong>${p.oldPrice?`<span style="font-size:11px;color:var(--muted);text-decoration:line-through;margin-left:4px">₹${p.oldPrice}</span>`:''}</td>
-        <td><span style="color:${p.stock<20?'#c0392b':'var(--text)'}">${p.stock}</span></td>
-        <td>${p.badge?`<span style="font-size:11px;background:var(--saffron-lt);color:var(--bark);padding:3px 8px;border-radius:3px">${p.badge}</span>`:'—'}</td>
-        <td>
-          <button class="action-btn" onclick="openProductModal('${p._id}')">Edit</button>
-          <button class="action-btn del" onclick="deleteProduct('${p._id}','${p.name}')">Delete</button>
+        <td><span style="color:${stockColor};font-weight:500">${stockLabel}</span></td>
+        <td>${p.badge?`<span style="font-size:11px;background:var(--saffron-lt,#FDF0DC);color:#6B4223;padding:3px 8px;border-radius:3px">${p.badge}</span>`:'—'}</td>
+        <td style="white-space:nowrap">
+          <button class="action-btn" onclick="openProductModal('${p._id}')">✏️ Edit</button>
+          <button class="action-btn del" onclick="deleteProduct('${p._id}','${p.name.replace(/'/g,"\\'")}')">🗑 Delete</button>
         </td>
-      </tr>`).join('')}
-    </tbody></table>`;
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+// ─── PHOTO UPLOAD ─────────────────────────────────
+function previewProductPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById('pImagePreview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.querySelector('.photo-hint').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
 }
 
 function openProductModal(id) {
-  editingProductId = id || null;
+  editingProductId     = id || null;
+  editingImageFilename = null;
   document.getElementById('productModalTitle').textContent = id ? 'Edit Product' : 'Add Product';
-  const fields = ['pName','pTamil','pCat','pEmoji','pDesc','pIngredients','pHowTo','pPrice','pOldPrice','pStock','pWeight','pBadge','pRating'];
-  fields.forEach(f => {
-    const el = document.getElementById(f);
-    if (el) el.value = '';
+  // Reset photo
+  document.getElementById('pImageFile').value       = '';
+  document.getElementById('pImageFilename').value   = '';
+  document.getElementById('pImagePreview').style.display = 'none';
+  document.getElementById('pImagePreview').src      = '';
+  document.querySelector('.photo-hint').style.display = 'block';
+  // Reset fields
+  ['pName','pTamil','pEmoji','pDesc','pIngredients','pHowTo','pPrice','pOldPrice','pStock','pWeight','pRating'].forEach(f => {
+    const el = document.getElementById(f); if (el) el.value = '';
   });
+  document.getElementById('pCat').value     = '';
+  document.getElementById('pBadge').value   = '';
   document.getElementById('pFeatured').checked = false;
+
   if (id) {
     const p = allProducts.find(x => x._id === id);
     if (p) {
-      document.getElementById('pName').value = p.name || '';
-      document.getElementById('pTamil').value = p.tamil || '';
-      document.getElementById('pCat').value = p.cat || '';
-      document.getElementById('pEmoji').value = p.emoji || '';
-      document.getElementById('pDesc').value = p.desc || '';
+      document.getElementById('pName').value        = p.name        || '';
+      document.getElementById('pTamil').value       = p.tamil       || '';
+      document.getElementById('pCat').value         = p.cat         || '';
+      document.getElementById('pEmoji').value       = p.emoji       || '';
+      document.getElementById('pDesc').value        = p.desc        || '';
       document.getElementById('pIngredients').value = p.ingredients || '';
-      document.getElementById('pHowTo').value = p.howToUse || '';
-      document.getElementById('pPrice').value = p.price || '';
-      document.getElementById('pOldPrice').value = p.oldPrice || '';
-      document.getElementById('pStock').value = p.stock || '';
-      document.getElementById('pWeight').value = p.weight || '';
-      document.getElementById('pBadge').value = p.badge || '';
-      document.getElementById('pRating').value = p.rating || '';
-      document.getElementById('pFeatured').checked = !!p.featured;
+      document.getElementById('pHowTo').value       = p.howToUse    || '';
+      document.getElementById('pPrice').value       = p.price       || '';
+      document.getElementById('pOldPrice').value    = p.oldPrice    || '';
+      document.getElementById('pStock').value       = p.stock       ?? '';
+      document.getElementById('pWeight').value      = p.weight      || '';
+      document.getElementById('pBadge').value       = p.badge       || '';
+      document.getElementById('pRating').value      = p.rating      || '';
+      document.getElementById('pFeatured').checked  = !!p.featured;
+      if (p.image) {
+        editingImageFilename = p.image;
+        document.getElementById('pImageFilename').value = p.image;
+        const preview = document.getElementById('pImagePreview');
+        preview.src   = `/uploads/${p.image}`;
+        preview.style.display = 'block';
+        document.querySelector('.photo-hint').style.display = 'none';
+      }
     }
   }
   openModal('productModal');
 }
 
 async function saveProduct() {
-  const name = document.getElementById('pName').value.trim();
-  const cat  = document.getElementById('pCat').value;
+  const name  = document.getElementById('pName').value.trim();
+  const cat   = document.getElementById('pCat').value;
   const price = parseFloat(document.getElementById('pPrice').value);
-  if (!name || !cat || !price) { showToast('Name, Category and Price are required'); return; }
-  const body = {
-    name, cat, price,
-    tamil:       document.getElementById('pTamil').value.trim(),
-    emoji:       document.getElementById('pEmoji').value.trim() || '🌿',
-    desc:        document.getElementById('pDesc').value.trim(),
-    ingredients: document.getElementById('pIngredients').value.trim(),
-    howToUse:    document.getElementById('pHowTo').value.trim(),
-    oldPrice:    parseFloat(document.getElementById('pOldPrice').value) || null,
-    stock:       parseInt(document.getElementById('pStock').value) || 100,
-    weight:      document.getElementById('pWeight').value.trim(),
-    badge:       document.getElementById('pBadge').value || null,
-    rating:      parseFloat(document.getElementById('pRating').value) || 4.5,
-    featured:    document.getElementById('pFeatured').checked,
-  };
+  if (!name || !cat || !price) {
+    let missing = [];
+    if (!name)  missing.push('Name');
+    if (!cat)   missing.push('Category');
+    if (!price) missing.push('Price');
+    showToast('Missing: ' + missing.join(', '));
+    return;
+  }
+
+  const saveBtn = document.querySelector('#productModal .btn-save');
+  saveBtn.textContent = 'Saving…'; saveBtn.disabled = true;
+
   try {
-    const url = editingProductId ? `/api/products/${editingProductId}` : '/api/products';
+    // Upload image if a new file was selected
+    let imageFilename = document.getElementById('pImageFilename').value || editingImageFilename || '';
+    const fileInput   = document.getElementById('pImageFile');
+    if (fileInput.files.length) {
+      const fd = new FormData();
+      fd.append('image', fileInput.files[0]);
+      const upRes  = await fetch('/api/upload', { method:'POST', body:fd });
+      const upData = await upRes.json();
+      if (upData.success) {
+        if (editingImageFilename && editingImageFilename !== upData.filename) {
+          fetch(`/api/upload/${editingImageFilename}`, { method:'DELETE' });
+        }
+        imageFilename = upData.filename;
+      }
+    }
+
+    const body = {
+      name, cat, price,
+      tamil:       document.getElementById('pTamil').value.trim(),
+      emoji:       document.getElementById('pEmoji').value.trim() || '🌿',
+      desc:        document.getElementById('pDesc').value.trim(),
+      ingredients: document.getElementById('pIngredients').value.trim(),
+      howToUse:    document.getElementById('pHowTo').value.trim(),
+      oldPrice:    parseFloat(document.getElementById('pOldPrice').value) || null,
+      stock:       parseInt(document.getElementById('pStock').value) || 100,
+      weight:      document.getElementById('pWeight').value.trim(),
+      badge:       document.getElementById('pBadge').value || null,
+      rating:      parseFloat(document.getElementById('pRating').value) || 4.5,
+      featured:    document.getElementById('pFeatured').checked,
+      image:       imageFilename,
+    };
+
+    const url    = editingProductId ? `/api/products/${editingProductId}` : '/api/products';
     const method = editingProductId ? 'PUT' : 'POST';
-    const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    const data = await res.json();
+    const res    = await fetch(url, { method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const data   = await res.json();
     if (data.success) {
-      showToast(editingProductId ? 'Product updated ✅' : 'Product added ✅');
+      showToast(editingProductId ? 'Product updated ✅' : 'Product added ✅ — Live in shop now!');
       closeModal('productModal');
       loadProducts();
       loadDashboard();
     } else { showToast('Error: ' + data.error); }
-  } catch (e) { showToast('Error saving product'); }
+  } catch(e) { showToast('Error saving product'); }
+  finally { saveBtn.textContent = 'Save Product'; saveBtn.disabled = false; }
 }
 
 async function deleteProduct(id, name) {
   if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
   try {
-    await fetch(`/api/products/${id}`, { method: 'DELETE' });
+    await fetch(`/api/products/${id}`, { method:'DELETE' });
     showToast(`"${name}" deleted`);
-    loadProducts();
-    loadDashboard();
-  } catch (e) { showToast('Error deleting product'); }
+    loadProducts(); loadDashboard();
+  } catch(e) { showToast('Error deleting product'); }
+}
+
+// ─── CUSTOMERS ────────────────────────────────────
+let custTab = 'registered';
+
+function switchCustTab(tab) {
+  custTab = tab;
+  document.getElementById('tab-registered').style.cssText = tab==='registered'
+    ? 'padding:8px 18px;border-radius:20px;border:2px solid var(--forest);background:var(--forest);color:white;font-size:13px;cursor:pointer;font-family:"DM Sans",sans-serif;font-weight:500'
+    : 'padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:white;color:var(--muted);font-size:13px;cursor:pointer;font-family:"DM Sans",sans-serif';
+  document.getElementById('tab-orders').style.cssText = tab==='orders'
+    ? 'padding:8px 18px;border-radius:20px;border:2px solid var(--forest);background:var(--forest);color:white;font-size:13px;cursor:pointer;font-family:"DM Sans",sans-serif;font-weight:500'
+    : 'padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:white;color:var(--muted);font-size:13px;cursor:pointer;font-family:"DM Sans",sans-serif';
+  document.getElementById('custTableTitle').textContent = tab==='registered' ? 'Registered Users' : 'Customers from Orders';
+  filterCustomers();
+}
+
+async function loadCustomers() {
+  document.getElementById('customersTable').innerHTML = '<div class="table-loading">Loading customers…</div>';
+  try {
+    // Load both sources in parallel
+    const [regRes, ordRes] = await Promise.all([
+      fetch('/api/registered-customers'),
+      fetch('/api/customers')
+    ]);
+    const regData = await regRes.json();
+    const ordData = await ordRes.json();
+
+    allCustomers = regData.success ? regData.data : [];
+    const orderCustomers = ordData.success ? ordData.data : [];
+
+    // Stats
+    const today = new Date().toDateString();
+    const joinedToday = allCustomers.filter(c => new Date(c.registeredAt).toDateString() === today).length;
+    const buyers = allCustomers.filter(c => c.orderCount > 0).length;
+    const revenue = allCustomers.reduce((s, c) => s + (c.totalSpent||0), 0);
+
+    document.getElementById('cstTotal').textContent   = allCustomers.length;
+    document.getElementById('cstBuyers').textContent  = buyers;
+    document.getElementById('cstToday').textContent   = joinedToday;
+    document.getElementById('cstRevenue').textContent = '₹' + revenue.toLocaleString('en-IN');
+
+    // Store order-based list separately
+    allCustomers._orderBased = orderCustomers;
+
+    filterCustomers();
+  } catch(e) {
+    document.getElementById('customersTable').innerHTML = '<div class="table-empty">Could not load customers</div>';
+  }
+}
+
+function filterCustomers() {
+  const q    = (document.getElementById('customerSearch').value || '').toLowerCase();
+  const list = custTab === 'registered' ? allCustomers : (allCustomers._orderBased || []);
+  const filtered = list.filter(c =>
+    c.name?.toLowerCase().includes(q) ||
+    c.phone?.includes(q) ||
+    c.email?.toLowerCase().includes(q)
+  );
+  document.getElementById('customerCount').textContent = `${filtered.length} customer${filtered.length!==1?'s':''}`;
+  renderCustomers(filtered, custTab);
+}
+
+function renderCustomers(customers, tab) {
+  window._lastRenderedCustomers = customers;
+  const el = document.getElementById('customersTable');
+  if (!customers.length) { el.innerHTML = '<div class="table-empty">No customers yet</div>'; return; }
+
+  if (tab === 'registered') {
+    el.innerHTML = `<table>
+      <thead><tr>
+        <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
+        <th>Registered On</th><th>Orders</th><th>Total Spent</th><th>Details</th>
+      </tr></thead>
+      <tbody>${customers.map((c,i) => `<tr>
+        <td style="color:var(--muted);font-size:12px">${i+1}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--forest),#2D5A2D);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">${(c.name||'?').charAt(0).toUpperCase()}</div>
+            <strong>${c.name||'—'}</strong>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--muted)">${c.email||'—'}</td>
+        <td>${c.phone||'—'}</td>
+        <td style="font-size:12px;color:var(--muted)">${c.registeredAt ? new Date(c.registeredAt).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'}</td>
+        <td><span style="background:${c.orderCount>0?'#EDF5E8':'#f5f5f5'};color:${c.orderCount>0?'var(--forest)':'var(--muted)'};padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500">${c.orderCount||0} order${c.orderCount!==1?'s':''}</span></td>
+        <td><strong style="color:var(--forest)">₹${(c.totalSpent||0).toLocaleString('en-IN')}</strong></td>
+        <td><button class="action-btn" onclick="viewCustomer(${i},'registered')">View</button></td>
+      </tr>`).join('')}</tbody></table>`;
+  } else {
+    el.innerHTML = `<table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>City</th><th>Orders</th><th>Total Spent</th><th>Last Order</th><th>Details</th></tr></thead>
+      <tbody>${customers.map((c,i) => `<tr>
+        <td><strong>${c.name||'—'}</strong></td>
+        <td>${c.phone||'—'}</td>
+        <td style="font-size:12px;color:var(--muted)">${c.email||'—'}</td>
+        <td>${c.addresses?.[0]?.city||'—'}${c.addresses?.length>1?` <span style="font-size:10px;color:var(--muted)">(+${c.addresses.length-1})</span>`:''}</td>
+        <td>${c.orders?.length||0}</td>
+        <td><strong>₹${(c.totalSpent||0).toLocaleString('en-IN')}</strong></td>
+        <td style="font-size:12px;color:var(--muted)">${c.lastOrder?new Date(c.lastOrder).toLocaleDateString('en-IN'):'—'}</td>
+        <td><button class="action-btn" onclick="viewCustomer(${i},'orders')">View All</button></td>
+      </tr>`).join('')}</tbody></table>`;
+  }
+}
+
+function viewCustomer(idx, tab) {
+  const src = tab === 'orders' ? (allCustomers._orderBased || []) : allCustomers;
+  // find from the currently displayed (filtered) list via index isn't reliable after filter;
+  // store last rendered list instead
+  const c = (window._lastRenderedCustomers || src)[idx];
+  if (!c) return;
+  document.getElementById('customerModalTitle').textContent = c.name || 'Customer Details';
+
+  const addressesHtml = c.addresses?.length
+    ? c.addresses.map((a, i) => `
+        <div class="cust-address-card">
+          <div class="addr-label">Address ${c.addresses.length > 1 ? i+1 : ''}</div>
+          <div>${a.street || ''}</div>
+          <div>${[a.city, a.state, a.pin].filter(Boolean).join(', ')}</div>
+        </div>`).join('')
+    : '<p style="color:var(--muted);font-size:13px">No address saved yet</p>';
+
+  const orders = c.orders || [];
+  const ordersHtml = orders.length
+    ? `<table style="width:100%;border-collapse:collapse;margin-top:0.5rem">
+        <thead><tr>
+          <th style="font-size:11px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)">Order ID</th>
+          <th style="font-size:11px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)">Items</th>
+          <th style="font-size:11px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)">Amount</th>
+          <th style="font-size:11px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)">Date</th>
+        </tr></thead>
+        <tbody>${orders.map(o=>`<tr>
+          <td style="padding:6px 8px;font-size:12px"><strong>${o.orderId||'—'}</strong></td>
+          <td style="padding:6px 8px;font-size:12px;color:var(--muted)">${o.itemCount||0} item(s)</td>
+          <td style="padding:6px 8px;font-size:12px">₹${o.total||0}</td>
+          <td style="padding:6px 8px;font-size:12px;color:var(--muted)">${new Date(o.date).toLocaleDateString('en-IN')}</td>
+        </tr>`).join('')}</tbody>
+      </table>`
+    : '<p style="color:var(--muted);font-size:13px">No orders yet</p>';
+
+  const regRow = c.registeredAt
+    ? `<div><div style="font-size:11px;color:var(--muted);margin-bottom:3px">REGISTERED ON</div><div style="font-size:13px">${new Date(c.registeredAt).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div></div>` : '';
+
+  document.getElementById('customerModalBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">PHONE</div>
+        <div style="font-size:15px;font-weight:500">${c.phone||'—'}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">EMAIL</div>
+        <div style="font-size:14px">${c.email||'—'}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">TOTAL ORDERS</div>
+        <div style="font-size:15px;font-weight:500">${orders.length||c.orderCount||0}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px">TOTAL SPENT</div>
+        <div style="font-size:15px;font-weight:500;color:var(--forest)">₹${(c.totalSpent||0).toLocaleString('en-IN')}</div>
+      </div>
+      ${regRow}
+    </div>
+    <div style="margin-bottom:1.25rem">
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">📍 Saved Addresses (${c.addresses?.length||0})</div>
+      ${addressesHtml}
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">📦 Order History</div>
+      ${ordersHtml}
+    </div>`;
+  openModal('customerModal');
 }
 
 // ─── COUPONS ──────────────────────────────────────
 async function loadCoupons() {
   try {
-    const res = await fetch('/api/coupons');
+    const res  = await fetch('/api/coupons');
     const data = await res.json();
     if (data.success) { allCoupons = data.data; renderCoupons(allCoupons); }
-  } catch (e) {
+  } catch(e) {
     document.getElementById('couponsTable').innerHTML = '<div class="table-empty">Could not load coupons</div>';
   }
 }
@@ -608,57 +973,179 @@ function renderCoupons(coupons) {
   if (!coupons.length) { el.innerHTML = '<div class="table-empty">No coupons yet. Add one!</div>'; return; }
   el.innerHTML = `<table>
     <thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Used / Max</th><th>Expires</th><th>Actions</th></tr></thead>
-    <tbody>
-      ${coupons.map(c => `<tr>
-        <td><strong style="font-family:monospace;font-size:15px;letter-spacing:1px">${c.code}</strong></td>
-        <td>${c.type === 'percent' ? 'Percentage' : 'Flat Amount'}</td>
-        <td><strong>${c.type === 'percent' ? c.value + '%' : '₹' + c.value}</strong></td>
-        <td>₹${c.minOrder || 0}</td>
-        <td>${c.usedCount} / ${c.maxUses}</td>
-        <td style="font-size:12px;color:var(--muted)">${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString('en-IN') : 'No expiry'}</td>
-        <td><button class="action-btn del" onclick="deleteCoupon('${c._id}','${c.code}')">Delete</button></td>
-      </tr>`).join('')}
-    </tbody></table>`;
+    <tbody>${coupons.map(c=>`<tr>
+      <td><strong style="font-family:monospace;font-size:15px;letter-spacing:1px">${c.code}</strong></td>
+      <td>${c.type==='percent'?'Percentage':'Flat Amount'}</td>
+      <td><strong>${c.type==='percent'?c.value+'%':'₹'+c.value}</strong></td>
+      <td>₹${c.minOrder||0}</td>
+      <td>${c.usedCount} / ${c.maxUses}</td>
+      <td style="font-size:12px;color:var(--muted)">${c.expiresAt?new Date(c.expiresAt).toLocaleDateString('en-IN'):'No expiry'}</td>
+      <td><button class="action-btn del" onclick="deleteCoupon('${c._id}','${c.code}')">Delete</button></td>
+    </tr>`).join('')}</tbody></table>`;
 }
 
 function openCouponModal() {
-  ['cCode','cValue','cMinOrder','cMaxUses','cExpiry'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['cCode','cValue','cMinOrder','cMaxUses','cExpiry'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('cType').value = 'percent';
   openModal('couponModal');
 }
 
 async function saveCoupon() {
-  const code = document.getElementById('cCode').value.trim().toUpperCase();
+  const code  = document.getElementById('cCode').value.trim().toUpperCase();
   const value = parseFloat(document.getElementById('cValue').value);
   if (!code || !value) { showToast('Code and Value are required'); return; }
   const body = {
-    code,
-    type: document.getElementById('cType').value,
-    value,
-    minOrder: parseFloat(document.getElementById('cMinOrder').value) || 0,
-    maxUses: parseInt(document.getElementById('cMaxUses').value) || 1000,
-    expiresAt: document.getElementById('cExpiry').value || null,
+    code, value,
+    type:     document.getElementById('cType').value,
+    minOrder: parseFloat(document.getElementById('cMinOrder').value)||0,
+    maxUses:  parseInt(document.getElementById('cMaxUses').value)||1000,
+    expiresAt:document.getElementById('cExpiry').value||null,
   };
   try {
-    const res = await fetch('/api/coupons', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const res  = await fetch('/api/coupons',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const data = await res.json();
     if (data.success) { showToast('Coupon created ✅'); closeModal('couponModal'); loadCoupons(); }
-    else showToast('Error: ' + data.error);
-  } catch (e) { showToast('Error saving coupon'); }
+    else showToast('Error: '+data.error);
+  } catch(e) { showToast('Error saving coupon'); }
 }
 
 async function deleteCoupon(id, code) {
   if (!confirm(`Delete coupon "${code}"?`)) return;
   try {
-    await fetch(`/api/coupons/${id}`, { method: 'DELETE' });
+    await fetch(`/api/coupons/${id}`,{method:'DELETE'});
     showToast(`Coupon "${code}" deleted`);
     loadCoupons();
-  } catch (e) { showToast('Error deleting coupon'); }
+  } catch(e) { showToast('Error deleting coupon'); }
+}
+
+// ─── SUBSCRIBERS ──────────────────────────────────
+let allSubscribers = [];
+
+async function loadSubscribers() {
+  document.getElementById('subscribersTable').innerHTML = '<div class="table-loading">Loading subscribers…</div>';
+  try {
+    const res  = await fetch('/api/subscribers');
+    const data = await res.json();
+    if (data.success) {
+      allSubscribers = data.data;
+      renderSubscribers(allSubscribers);
+      // Update stats
+      const today = new Date().toDateString();
+      const active = allSubscribers.filter(s => s.active).length;
+      const todayCount = allSubscribers.filter(s => new Date(s.subscribedAt).toDateString() === today).length;
+      document.getElementById('subTotal').textContent  = allSubscribers.length;
+      document.getElementById('subActive').textContent = active;
+      document.getElementById('subToday').textContent  = todayCount;
+      // Hide SMTP note if configured
+      fetch('/api/config').then(r=>r.json()).then(cfg=>{
+        if(cfg.smtpReady) document.getElementById('smtpNote') && (document.getElementById('smtpNote').style.display='none');
+      }).catch(()=>{});
+    }
+  } catch(e) {
+    document.getElementById('subscribersTable').innerHTML = '<div class="table-empty">Could not load subscribers</div>';
+  }
+}
+
+function renderSubscribers(list) {
+  const el = document.getElementById('subscribersTable');
+  if (!list.length) {
+    el.innerHTML = '<div class="table-empty" style="padding:2rem;text-align:center;color:var(--muted)">No subscribers yet. Share the website to grow your list!</div>';
+    return;
+  }
+  el.innerHTML = `<table>
+    <thead><tr>
+      <th>#</th><th>Email</th><th>Subscribed On</th><th>Status</th><th>Action</th>
+    </tr></thead>
+    <tbody>
+      ${list.map((s, i) => `<tr>
+        <td style="color:var(--muted)">${i+1}</td>
+        <td><strong>${s.email}</strong></td>
+        <td>${new Date(s.subscribedAt).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</td>
+        <td><span style="background:${s.active?'#E8F5E8':'#F5E8E8'};color:${s.active?'#1E6B1E':'#B0001E'};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:500">${s.active?'Active':'Inactive'}</span></td>
+        <td><button onclick="deleteSubscriber('${s._id}','${s.email}')" style="background:none;border:1px solid #fecaca;color:#c0392b;padding:4px 10px;border-radius:4px;font-size:12px;cursor:pointer">Remove</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function filterSubscribers(q) {
+  const filtered = allSubscribers.filter(s => s.email.toLowerCase().includes(q.toLowerCase()));
+  renderSubscribers(filtered);
+}
+
+async function deleteSubscriber(id, email) {
+  if (!confirm(`Remove ${email} from subscribers?`)) return;
+  try {
+    await fetch(`/api/subscribers/${id}`, { method: 'DELETE' });
+    showToast(`${email} removed`);
+    loadSubscribers();
+  } catch(e) { showToast('Error removing subscriber'); }
+}
+
+function openBlastModal() {
+  document.getElementById('blastResult').style.display = 'none';
+  document.getElementById('blastSubject').value = '';
+  document.getElementById('blastMessage').value = '';
+  document.getElementById('blastImageUrl').value = '';
+  document.getElementById('blastPreviewImg').style.display = 'none';
+  document.getElementById('blastModal').classList.add('open');
+}
+
+// Preview image when URL is typed
+document.addEventListener('DOMContentLoaded', () => {
+  const urlInput = document.getElementById('blastImageUrl');
+  if (urlInput) {
+    urlInput.addEventListener('input', () => {
+      const url = urlInput.value.trim();
+      const preview = document.getElementById('blastPreviewImg');
+      const img     = document.getElementById('blastPreviewImgEl');
+      if (url) { img.src = url; preview.style.display = 'block'; }
+      else     { preview.style.display = 'none'; }
+    });
+  }
+});
+
+async function sendBlast() {
+  const subject  = document.getElementById('blastSubject').value.trim();
+  const message  = document.getElementById('blastMessage').value.trim();
+  const imageUrl = document.getElementById('blastImageUrl').value.trim();
+  if (!subject || !message) { showToast('Subject and message are required'); return; }
+
+  const btn = document.getElementById('blastSendBtn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+
+  try {
+    const res  = await fetch('/api/subscribers/send-blast', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subject, message, imageUrl })
+    });
+    const data = await res.json();
+    const resultEl = document.getElementById('blastResult');
+    resultEl.style.display = 'block';
+    if (data.success) {
+      resultEl.style.background = '#F0FDF4';
+      resultEl.style.border     = '1px solid #A7F3D0';
+      resultEl.style.color      = '#065F46';
+      resultEl.textContent      = data.preview
+        ? `✓ Preview sent to console (${data.sent} subscribers). Configure SMTP in .env to send real emails.`
+        : `✓ Email sent to ${data.sent} subscribers successfully!`;
+      showToast(`📬 Sent to ${data.sent} subscribers`);
+    } else {
+      resultEl.style.background = '#FEF0F0';
+      resultEl.style.border     = '1px solid #FECACA';
+      resultEl.style.color      = '#B91C1C';
+      resultEl.textContent      = '✗ ' + (data.error || 'Failed to send');
+    }
+  } catch(e) {
+    showToast('Error sending blast');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send to All Subscribers →';
+  }
 }
 
 // Click outside modal to close
 document.querySelectorAll('.modal-backdrop').forEach(bd => {
-  bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('open'); });
+  bd.addEventListener('click', e => { if (e.target===bd) bd.classList.remove('open'); });
 });
 </script>
 </body>

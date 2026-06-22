@@ -16,32 +16,34 @@ html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(250,247,240,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem}
-.logo{display:flex;flex-direction:column;line-height:1}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(250,247,240,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem}
+.logo{display:flex;flex-direction:column;line-height:1;text-decoration:none}
 .logo-tamil{font-family:'Tiro Tamil',serif;font-size:20px;color:var(--forest)}
 .logo-en{font-size:10px;letter-spacing:3px;color:var(--saffron);text-transform:uppercase;font-weight:500}
 .nav-links{display:flex;gap:2rem;list-style:none}
-.nav-links a{text-decoration:none;color:var(--muted);font-size:14px;font-weight:400;transition:color 0.2s;letter-spacing:0.3px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:14px;transition:color 0.2s}
 .nav-links a:hover{color:var(--forest)}
 .nav-right{display:flex;align-items:center;gap:1rem}
-.nav-icon-btn{background:none;border:1px solid var(--border);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;position:relative}
-.nav-icon-btn:hover{border-color:var(--forest);background:var(--forest);color:white}
-.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--saffron);color:white;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.btn-signin{background:var(--forest);color:white;border:none;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background 0.2s}
+.btn-signin:hover{background:var(--forest2)}
+.btn-shop{background:var(--saffron);color:white;border:none;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background 0.2s}
+.btn-shop:hover{background:#a85e20}
 
 /* HERO */
 .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 2.5rem;padding-top:68px;background:var(--cream);position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;right:-10%;top:10%;width:500px;height:500px;border-radius:50%;background:rgba(212,164,55,0.08);pointer-events:none}
 .hero::after{content:'';position:absolute;left:40%;bottom:-5%;width:300px;height:300px;border-radius:50%;background:rgba(30,58,30,0.06);pointer-events:none}
 .hero-left{padding-right:3rem;animation:fadeUp 0.8s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--saffron-lt);border:1px solid rgba(200,118,42,0.3);color:var(--bark);font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:1.5rem}
 .hero h1{font-family:'Cormorant Garamond',serif;font-size:58px;line-height:1.1;color:var(--forest);margin-bottom:1rem;font-weight:600}
 .hero h1 em{color:var(--saffron);font-style:italic}
 .hero-tamil{font-family:'Tiro Tamil',serif;font-size:22px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
 .hero-desc{font-size:16px;color:var(--muted);line-height:1.8;max-width:440px;margin-bottom:2.5rem}
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
-.btn-primary{background:var(--forest);color:white;border:none;padding:15px 32px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.5px;transition:all 0.25s}
+.btn-primary{background:var(--forest);color:white;border:none;padding:15px 32px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.5px;transition:all 0.25s;text-decoration:none;display:inline-block}
 .btn-primary:hover{background:var(--forest2);transform:translateY(-2px)}
-.btn-ghost{background:transparent;color:var(--forest);border:1px solid var(--forest);padding:14px 28px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s}
+.btn-ghost{background:transparent;color:var(--forest);border:1px solid var(--forest);padding:14px 28px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s;text-decoration:none;display:inline-block}
 .btn-ghost:hover{background:var(--forest);color:white}
 .hero-right{display:flex;align-items:center;justify-content:center;animation:fadeUp 0.8s 0.2s ease both}
 .hero-illustration{width:420px;height:420px;background:var(--forest);border-radius:50% 40% 60% 30% / 40% 60% 30% 50%;display:flex;align-items:center;justify-content:center;font-size:160px;position:relative}
@@ -52,49 +54,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(250,247,240,
 
 /* MARQUEE */
 .marquee-wrap{background:var(--forest);color:white;padding:14px 0;overflow:hidden;white-space:nowrap}
-.marquee-inner{display:inline-flex;animation:marquee 20s linear infinite;gap:0}
+.marquee-inner{display:inline-flex;animation:marquee 20s linear infinite}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .marquee-item{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:0 2rem;opacity:0.85}
-.marquee-dot{color:var(--gold);padding:0 0.5rem}
+.marquee-dot{color:var(--gold)}
 
-/* CATEGORIES */
+/* ABOUT */
 .section{padding:5rem 2.5rem}
 .sec-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);font-weight:500;margin-bottom:0.75rem}
 .sec-title{font-family:'Cormorant Garamond',serif;font-size:38px;color:var(--forest);font-weight:600;margin-bottom:0.5rem}
 .sec-sub{font-size:15px;color:var(--muted);margin-bottom:3rem}
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
-.cat-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:all 0.25s;text-decoration:none;display:block}
-.cat-card:hover{border-color:var(--forest);transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,58,30,0.12)}
-.cat-icon{font-size:36px;margin-bottom:1rem}
-.cat-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
-.cat-tamil{font-family:'Tiro Tamil',serif;font-size:12px;color:var(--muted)}
-.cat-count{font-size:11px;color:var(--saffron);margin-top:4px;font-weight:500}
 
-/* PRODUCTS */
-.products-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
-.filter-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem}
-.fpill{background:var(--white);border:1px solid var(--border);padding:7px 18px;border-radius:30px;font-size:13px;cursor:pointer;transition:all 0.2s;color:var(--muted);font-family:'DM Sans',sans-serif}
-.fpill:hover,.fpill.active{background:var(--forest);color:white;border-color:var(--forest)}
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
-.product-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all 0.25s}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-text p{font-size:15px;color:var(--muted);line-height:1.9;margin-bottom:1.25rem}
+.about-text .quote{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest);font-style:italic;border-left:3px solid var(--gold);padding-left:1.25rem;margin:2rem 0;line-height:1.5}
+.about-values{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:2rem}
+.value-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1.25rem}
+.value-icon{font-size:24px;margin-bottom:8px}
+.value-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.value-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.about-visual{background:var(--forest);border-radius:16px;padding:3rem;color:white;position:relative;overflow:hidden}
+.about-visual::before{content:'🌿';position:absolute;font-size:180px;right:-20px;bottom:-20px;opacity:0.1}
+.about-visual h3{font-family:'Cormorant Garamond',serif;font-size:30px;margin-bottom:1rem;font-weight:400;line-height:1.3}
+.about-visual p{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:1.5rem}
+.about-stat-row{display:flex;gap:2rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.15)}
+.about-stat .n{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);font-weight:600}
+.about-stat .l{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px}
+
+/* FEATURED PRODUCTS */
+.featured-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
+.product-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.25s}
 .product-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,0.1)}
 .p-img{background:linear-gradient(135deg,#EDF5E8,#F5F0E8);height:200px;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative}
-.p-badge{position:absolute;top:12px;left:12px;font-size:10px;font-weight:600;padding:4px 10px;border-radius:4px;letter-spacing:0.5px;text-transform:uppercase}
-.badge-best{background:var(--saffron-lt);color:var(--bark)}
-.badge-new{background:#E8F5E8;color:var(--forest)}
-.badge-sale{background:#FDE8D8;color:#B85000}
+.p-img img{width:100%;height:100%;object-fit:cover}
 .p-body{padding:1.25rem}
 .p-cat{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--saffron);margin-bottom:6px;font-weight:500}
 .p-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.2}
-.p-tamil{font-family:'Tiro Tamil',serif;font-size:12px;color:var(--muted);margin-bottom:8px}
-.p-stars{color:#D4A437;font-size:12px;margin-bottom:6px}
-.p-stars span{color:var(--muted);font-size:11px}
 .p-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
 .p-footer{display:flex;align-items:center;justify-content:space-between}
 .p-price{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--forest)}
-.p-old{font-size:13px;color:var(--muted);text-decoration:line-through;margin-left:6px}
-.add-btn{background:var(--forest);color:white;border:none;padding:9px 16px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
-.add-btn:hover{background:var(--forest2)}
-.add-btn.added{background:var(--saffron)}
+.login-to-buy{background:var(--saffron-lt);color:var(--bark);border:1px solid rgba(200,118,42,0.3);padding:8px 14px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all 0.2s}
+.login-to-buy:hover{background:var(--saffron);color:white}
+.no-featured{text-align:center;padding:4rem 2rem;color:var(--muted);grid-column:1/-1}
+.no-featured h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--forest);margin-bottom:0.5rem}
 
 /* PROMO */
 .promo-section{background:var(--forest);padding:5rem 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
@@ -110,24 +112,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(250,247,240,
 .benefit-title{font-size:13px;font-weight:500;color:white;margin-bottom:4px}
 .benefit-desc{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5}
 
-/* TESTIMONIALS */
-.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}
-.testi-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
-.testi-stars{color:var(--gold);font-size:14px;margin-bottom:1rem}
-.testi-text{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-style:italic}
-.testi-author{display:flex;align-items:center;gap:10px}
-.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--forest);color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
-.testi-name{font-size:13px;font-weight:500;color:var(--text)}
-.testi-place{font-size:11px;color:var(--muted)}
+/* CATEGORIES PREVIEW */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}
+.cat-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1.75rem 1rem;text-align:center;cursor:pointer;transition:all 0.25s;text-decoration:none;display:block}
+.cat-card:hover{border-color:var(--forest);transform:translateY(-4px);box-shadow:0 12px 32px rgba(30,58,30,0.12)}
+.cat-icon{font-size:36px;margin-bottom:1rem}
+.cat-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.cat-tamil{font-family:'Tiro Tamil',serif;font-size:12px;color:var(--muted)}
 
 /* NEWSLETTER */
 .newsletter{background:var(--saffron-lt);border-top:1px solid rgba(200,118,42,0.2);border-bottom:1px solid rgba(200,118,42,0.2);padding:3rem 2.5rem;text-align:center}
 .newsletter h3{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--forest);margin-bottom:0.5rem}
 .newsletter p{font-size:14px;color:var(--muted);margin-bottom:1.5rem}
 .newsletter-form{display:flex;gap:0.75rem;max-width:440px;margin:0 auto;flex-wrap:wrap;justify-content:center}
-.newsletter-form input{flex:1;min-width:220px;padding:12px 18px;border:1px solid var(--border);border-radius:4px;font-size:14px;font-family:'DM Sans',sans-serif;background:white;color:var(--text);outline:none}
+.newsletter-form input{flex:1;min-width:220px;padding:12px 18px;border:1px solid var(--border);border-radius:4px;font-size:14px;font-family:'DM Sans',sans-serif;background:white;outline:none}
 .newsletter-form input:focus{border-color:var(--forest)}
-.newsletter-form button{background:var(--saffron);color:white;border:none;padding:12px 24px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.newsletter-form button{background:var(--saffron);color:white;border:none;padding:12px 24px;border-radius:4px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s}
+.newsletter-form button:hover{background:#a85e20}
 
 /* FOOTER */
 footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.5rem}
@@ -139,57 +140,18 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
 .footer-col ul li{margin-bottom:0.6rem}
 .footer-col ul li a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;transition:color 0.2s}
 .footer-col ul li a:hover{color:white}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;font-size:12px;flex-wrap:wrap;gap:1rem}
-
-/* CART DRAWER */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s}
-.overlay.open{opacity:1;pointer-events:all}
-.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:380px;background:var(--white);z-index:301;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.15)}
-.cart-drawer.open{transform:translateX(0)}
-.cart-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.cart-header h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest)}
-.close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px}
-.cart-items{flex:1;overflow-y:auto;padding:1.25rem}
-.cart-empty{text-align:center;padding:3rem 1rem;color:var(--muted)}
-.cart-empty-icon{font-size:48px;margin-bottom:1rem}
-.cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)}
-.cart-item-img{width:64px;height:64px;background:var(--saffron-lt);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
-.cart-item-info{flex:1}
-.cart-item-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
-.cart-item-price{font-size:14px;color:var(--saffron);font-weight:500}
-.cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:8px}
-.qty-btn{background:var(--cream);border:1px solid var(--border);width:26px;height:26px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.qty-num{font-size:14px;font-weight:500;min-width:20px;text-align:center}
-.remove-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;margin-left:auto}
-.cart-footer{padding:1.25rem;border-top:1px solid var(--border)}
-.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-.cart-total span:first-child{font-size:14px;color:var(--muted)}
-.cart-total span:last-child{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--forest)}
-.checkout-btn{width:100%;background:var(--forest);color:white;border:none;padding:15px;border-radius:4px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s}
-.checkout-btn:hover{background:var(--forest2)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:12px;flex-wrap:wrap;gap:1rem}
 
 /* TOAST */
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest);color:white;padding:12px 24px;border-radius:6px;font-size:14px;opacity:0;transition:all 0.3s;z-index:500;white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  nav{padding:0 1.25rem}
-  .nav-links{display:none}
-  .hero{grid-template-columns:1fr;text-align:center;padding:5rem 1.25rem 3rem}
-  .hero h1{font-size:38px}
-  .hero-illustration{width:260px;height:260px;font-size:100px}
-  .hero-left{padding-right:0}
-  .hero-btns{justify-content:center}
-  .hero-stats{justify-content:center}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:88px}
+  .hero-right{display:none}
+  .about-grid{grid-template-columns:1fr}
   .promo-section{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
-  .cart-drawer{width:100%}
-  .section{padding:3rem 1.25rem}
 }
 </style>
 </head>
@@ -197,21 +159,17 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
 
 <!-- NAV -->
 <nav>
-  <div class="logo">
+  <a class="logo" href="index.html">
     <div class="logo-tamil">சித்த வளம்</div>
     <div class="logo-en">Siddha Valam</div>
-  </div>
+  </a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
+    <li><a href="#about">About Us</a></li>
     <li><a href="#products">Products</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="nav-icon-btn" onclick="openCart()" title="Cart">
-      🛒
-      <span class="cart-badge" id="cartBadge">0</span>
-    </button>
+  <div class="nav-right" id="navRight">
+    <!-- filled by JS -->
   </div>
 </nav>
 
@@ -222,9 +180,8 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
     <h1>Ancient <em>Healing</em><br>For Modern Life</h1>
     <div class="hero-tamil">தமிழ் மூலிகை மருத்துவம் — உங்கள் வீட்டு வாசலில்</div>
     <p class="hero-desc">Authentic Siddha and Ayurvedic products handpicked from Tamil Nadu farms and villages. Pure, lab-tested, and trusted by thousands of families.</p>
-    <div class="hero-btns">
-      <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
-      <button class="btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Our Story</button>
+    <div class="hero-btns" id="heroBtns">
+      <!-- filled by JS based on login state -->
     </div>
     <div class="hero-stats">
       <div class="stat-item"><div class="num">500+</div><div class="label">Products</div></div>
@@ -240,66 +197,87 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-inner">
+    <span class="marquee-item">Pure Siddha Medicine</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Lab Tested & Certified</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Farm to Doorstep</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">100% Organic</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Lab Tested</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Village Sourced</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Free Shipping ₹499+</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Traditional Recipes</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">No Chemicals</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Farmer Direct</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Trusted by 12,000+ Families</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Tamil Nadu Heritage</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Pure Siddha Medicine</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Lab Tested & Certified</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Farm to Doorstep</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">100% Organic</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Lab Tested</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Village Sourced</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Free Shipping ₹499+</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Traditional Recipes</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">No Chemicals</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">Farmer Direct</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Trusted by 12,000+ Families</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Tamil Nadu Heritage</span><span class="marquee-dot">✦</span>
   </div>
 </div>
 
-<!-- CATEGORIES -->
-<section class="section" id="categories">
-  <div class="sec-label">Browse By</div>
-  <div class="sec-title">Product Categories</div>
-  <div class="sec-sub">Explore our traditional Siddha formulations</div>
-  <div class="cat-grid">
-    <a class="cat-card" onclick="filterP('Oils')"><div class="cat-icon">🫙</div><div class="cat-name">Herbal Oils</div><div class="cat-tamil">மூலிகை எண்ணெய்</div><div class="cat-count">12 Products</div></a>
-    <a class="cat-card" onclick="filterP('Churna')"><div class="cat-icon">🌾</div><div class="cat-name">Churna & Powder</div><div class="cat-tamil">சூரணம்</div><div class="cat-count">18 Products</div></a>
-    <a class="cat-card" onclick="filterP('Kadha')"><div class="cat-icon">🍵</div><div class="cat-name">Kadha & Herbal Tea</div><div class="cat-tamil">கஷாயம்</div><div class="cat-count">9 Products</div></a>
-    <a class="cat-card" onclick="filterP('Skin')"><div class="cat-icon">✨</div><div class="cat-name">Skin & Beauty</div><div class="cat-tamil">அழகு பொருட்கள்</div><div class="cat-count">15 Products</div></a>
-    <a class="cat-card" onclick="filterP('Ghee')"><div class="cat-icon">🧈</div><div class="cat-name">Herbal Ghee</div><div class="cat-tamil">மூலிகை நெய்</div><div class="cat-count">6 Products</div></a>
-    <a class="cat-card" onclick="filterP('Immunity')"><div class="cat-icon">🛡️</div><div class="cat-name">Immunity Boosters</div><div class="cat-tamil">நோய் எதிர்ப்பு</div><div class="cat-count">11 Products</div></a>
+<!-- ABOUT US -->
+<section class="section" id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="sec-label">Who We Are</div>
+      <div class="sec-title">Rooted in Tamil<br>Siddha Tradition</div>
+      <p>சித்த வளம் (Siddha Valam) was born from a deep belief that the ancient healing wisdom of Tamil Nadu deserves to reach every home. We source our herbs and formulations directly from traditional Siddha practitioners and certified organic farms across Tamil Nadu.</p>
+      <p>Every product is prepared following classical Siddha texts — the same formulations used by Tamil healers for over 5,000 years. No shortcuts. No synthetic additives. Only pure, authentic medicine.</p>
+      <div class="quote">"உடலை காக்கும் மருந்து, இயற்கையிலிருந்தே வரும்" — The medicine that protects the body comes from nature itself.</div>
+      <div class="about-values">
+        <div class="value-card"><div class="value-icon">🌱</div><div class="value-title">100% Organic</div><div class="value-desc">No synthetic additives or preservatives ever</div></div>
+        <div class="value-card"><div class="value-icon">🔬</div><div class="value-title">Lab Tested</div><div class="value-desc">Every batch tested for purity and potency</div></div>
+        <div class="value-card"><div class="value-icon">🚚</div><div class="value-title">Fast Delivery</div><div class="value-desc">2–4 days across Tamil Nadu</div></div>
+        <div class="value-card"><div class="value-icon">↩️</div><div class="value-title">Easy Returns</div><div class="value-desc">30-day no-questions return policy</div></div>
+      </div>
+    </div>
+    <div class="about-visual">
+      <h3>Bringing Ancient Wisdom to Modern Homes</h3>
+      <p>Our team works with certified Siddha vaithiyars (traditional doctors) and organic farmers to ensure every product meets the highest standards of purity and effectiveness.</p>
+      <p>From Brahmi oil for hair to Triphala churna for digestion — each product carries centuries of knowledge and the goodness of Tamil Nadu's rich botanical heritage.</p>
+      <div class="about-stat-row">
+        <div class="about-stat"><div class="n">500+</div><div class="l">Products</div></div>
+        <div class="about-stat"><div class="n">12K+</div><div class="l">Customers</div></div>
+        <div class="about-stat"><div class="n">5000</div><div class="l">Years Heritage</div></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section class="section" id="products" style="padding-top:0">
-  <div class="products-header">
-    <div>
-      <div class="sec-label">Our Collection</div>
-      <div class="sec-title">All Products</div>
-    </div>
+<!-- WHAT WE SELL (Categories) -->
+<section class="section" style="background:var(--white);padding-top:0">
+  <div class="sec-label">What We Sell</div>
+  <div class="sec-title">Our Product Range</div>
+  <div class="sec-sub">Authentic formulations across all areas of Siddha wellness</div>
+  <div class="cat-grid">
+    <a class="cat-card" href="login.html"><div class="cat-icon">🧴</div><div class="cat-name">Herbal Oils</div><div class="cat-tamil">மூலிகை எண்ணெய்</div></a>
+    <a class="cat-card" href="login.html"><div class="cat-icon">🌾</div><div class="cat-name">Churna & Powder</div><div class="cat-tamil">சூரணம்</div></a>
+    <a class="cat-card" href="login.html"><div class="cat-icon">🍵</div><div class="cat-name">Kadha & Herbal Tea</div><div class="cat-tamil">கஷாயம்</div></a>
+    <a class="cat-card" href="login.html"><div class="cat-icon">✨</div><div class="cat-name">Skin & Beauty</div><div class="cat-tamil">அழகு பொருட்கள்</div></a>
+    <a class="cat-card" href="login.html"><div class="cat-icon">🧈</div><div class="cat-name">Herbal Ghee</div><div class="cat-tamil">மூலிகை நெய்</div></a>
+    <a class="cat-card" href="login.html"><div class="cat-icon">🛡️</div><div class="cat-name">Immunity Boosters</div><div class="cat-tamil">நோய் எதிர்ப்பு</div></a>
   </div>
-  <div class="filter-row" id="filterRow">
-    <button class="fpill active" onclick="filterP('All')">All Products</button>
-    <button class="fpill" onclick="filterP('Oils')">Herbal Oils</button>
-    <button class="fpill" onclick="filterP('Churna')">Churna</button>
-    <button class="fpill" onclick="filterP('Kadha')">Kadha & Tea</button>
-    <button class="fpill" onclick="filterP('Skin')">Skin & Beauty</button>
-    <button class="fpill" onclick="filterP('Ghee')">Herbal Ghee</button>
-    <button class="fpill" onclick="filterP('Immunity')">Immunity</button>
+</section>
+
+<!-- FEATURED PRODUCTS (admin-selected) -->
+<section class="section" id="products">
+  <div class="sec-label">Handpicked by Us</div>
+  <div class="sec-title">Featured Products</div>
+  <div class="sec-sub">Our best-selling Siddha formulations — curated for you</div>
+  <div class="featured-grid" id="featuredGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Loading featured products…</div>
   </div>
-  <div class="products-grid" id="productsGrid"></div>
+  <div style="text-align:center;margin-top:2.5rem">
+    <a href="login.html" class="btn-primary" id="viewAllBtn">Login to See All Products →</a>
+  </div>
 </section>
 
 <!-- PROMO -->
-<section class="promo-section">
+<section class="promo-section" id="promoSection">
   <div class="promo-left">
-    <h2>Your First Order,<br><em>20% Off</em></h2>
-    <p>Welcome to the சித்த வளம் family. Use the code below on your first purchase and experience the power of authentic Siddha medicine.</p>
-    <div class="promo-code-box">
+    <h2 id="promoHeading">Special Offer<br><em id="promoDiscount">Just for You!</em></h2>
+    <p id="promoDesc">Welcome to the சித்த வளம் family. Sign in and use an offer code at checkout to save on your purchase.</p>
+    <div class="promo-code-box" id="promoCodeBox" style="display:none">
       <div class="promo-code-label">Discount Code</div>
-      <div class="promo-code">SIDDHA20</div>
+      <div class="promo-code" id="promoCode" onclick="copyPromoCode()" style="cursor:pointer" title="Click to copy"></div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:4px">Click to copy</div>
     </div>
   </div>
   <div class="promo-right">
@@ -310,24 +288,12 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="section" id="about">
-  <div class="sec-label">Customer Love</div>
-  <div class="sec-title">What People Say</div>
-  <div class="sec-sub">Real reviews from our happy customers</div>
-  <div class="testi-grid">
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Brahmi hair oil is amazing! My hair fall reduced in just 3 weeks. Genuine product, smells natural. Will order again."</div><div class="testi-author"><div class="testi-avatar">P</div><div><div class="testi-name">Priya S.</div><div class="testi-place">Chennai</div></div></div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Triphala churna is exactly what my grandmother used to make. Pure and authentic. Package was neat, delivery was fast."</div><div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rajan M.</div><div class="testi-place">Coimbatore</div></div></div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★☆</div><div class="testi-text">"The Tulsi kadha is excellent for immunity. My whole family had it during the cold season and we stayed healthy."</div><div class="testi-author"><div class="testi-avatar">A</div><div><div class="testi-name">Anitha K.</div><div class="testi-place">Madurai</div></div></div></div>
-  </div>
-</section>
-
 <!-- NEWSLETTER -->
-<div class="newsletter">
+<div class="newsletter" id="contact">
   <h3>Stay Connected with Nature</h3>
   <p>Subscribe for Ayurvedic tips, new product launches and exclusive offers</p>
   <div class="newsletter-form">
-    <input type="email" placeholder="Enter your email address">
+    <input type="email" id="newsEmail" placeholder="Enter your email address">
     <button onclick="subscribeNews()">Subscribe</button>
   </div>
 </div>
@@ -343,17 +309,17 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
     <div class="footer-col">
       <h4>Shop</h4>
       <ul>
-        <li><a href="#products">All Products</a></li>
-        <li><a href="#">Herbal Oils</a></li>
-        <li><a href="#">Churna</a></li>
-        <li><a href="#">Kadha & Tea</a></li>
-        <li><a href="#">Skin Care</a></li>
+        <li><a href="login.html">All Products</a></li>
+        <li><a href="login.html">Herbal Oils</a></li>
+        <li><a href="login.html">Churna</a></li>
+        <li><a href="login.html">Kadha & Tea</a></li>
+        <li><a href="login.html">Skin Care</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Help</h4>
       <ul>
-        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="#">Contact Us</a></li>
         <li><a href="#">Track Order</a></li>
         <li><a href="#">Return Policy</a></li>
         <li><a href="#">Shipping Info</a></li>
@@ -364,8 +330,8 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
       <h4>Contact</h4>
       <ul>
         <li><a href="#">📍 Chennai, Tamil Nadu</a></li>
-        <li><a href="#">📞 +91 98765 43210</a></li>
-        <li><a href="#">✉️ hello@siddha-valam.com</a></li>
+        <li><a href="tel:+919384858316">📞 +91 93848 58316</a></li>
+        <li><a href="mailto:gksince1990@gmail.com">✉️ gksince1990@gmail.com</a></li>
         <li><a href="#">⏰ Mon–Sat 9am–6pm</a></li>
       </ul>
     </div>
@@ -376,128 +342,150 @@ footer{background:var(--text);color:rgba(255,255,255,0.6);padding:3rem 2.5rem 1.
   </div>
 </footer>
 
-<!-- CART DRAWER -->
-<div class="overlay" id="overlay" onclick="closeCart()"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-header">
-    <h3>Your Cart 🛒</h3>
-    <button class="close-btn" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-total">
-      <span>Total Amount</span>
-      <span id="cartTotal">₹0</span>
-    </div>
-    <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout →</button>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-const PRODUCTS=[
-  {id:1,name:'Brahmi Hair Oil',tamil:'பிரம்மி தலை எண்ணெய்',cat:'Oils',emoji:'🫙',desc:'Cold-pressed with Brahmi & Bhringraj for hair growth and strength',price:299,oldPrice:399,badge:'best',rating:4.8,reviews:142},
-  {id:2,name:'Triphala Churna',tamil:'திரிபலா சூரணம்',cat:'Churna',emoji:'🌾',desc:'Classic 3-fruit blend for digestion, detox and immunity',price:180,oldPrice:null,badge:'new',rating:4.6,reviews:89},
-  {id:3,name:'Tulsi Kadha Mix',tamil:'துளசி கஷாயம்',cat:'Kadha',emoji:'🍵',desc:'Immunity-boosting herbal kadha with Tulsi, Ginger & Cinnamon',price:149,oldPrice:199,badge:'sale',rating:4.9,reviews:213},
-  {id:4,name:'Kumkumadi Tailam',tamil:'குங்குமாதி தைலம்',cat:'Skin',emoji:'✨',desc:'Luxurious saffron face oil for glowing skin. Traditional Kerala recipe',price:549,oldPrice:699,badge:'best',rating:4.7,reviews:98},
-  {id:5,name:'Ashwagandha Churna',tamil:'அஸ்வகந்தா சூரணம்',cat:'Immunity',emoji:'🛡️',desc:'Pure root powder for strength, stress relief and vitality',price:220,oldPrice:null,badge:'new',rating:4.8,reviews:176},
-  {id:6,name:'Panchakarma Ghee',tamil:'பஞ்சகர்ம நெய்',cat:'Ghee',emoji:'🧈',desc:'Medicated cow ghee with 8 herbs for digestion and mental clarity',price:450,oldPrice:550,badge:'sale',rating:4.5,reviews:67},
-  {id:7,name:'Neem Karela Juice',tamil:'வேம்பு பாகல் சாறு',cat:'Immunity',emoji:'🥤',desc:'Daily detox juice blend. Sugar-free, farm fresh neem and karela',price:199,oldPrice:null,badge:null,rating:4.4,reviews:54},
-  {id:8,name:'Chandan Ubtan',tamil:'சந்தன உப்தான்',cat:'Skin',emoji:'🌸',desc:'Traditional sandalwood and turmeric face pack for radiant skin',price:175,oldPrice:225,badge:'sale',rating:4.6,reviews:121},
-  {id:9,name:'Dashamool Powder',tamil:'தஷமூல சூரணம்',cat:'Churna',emoji:'🌾',desc:'10-root blend for joint support and inflammation. Traditional formula',price:260,oldPrice:null,badge:null,rating:4.3,reviews:42},
-  {id:10,name:'Mahanarayan Oil',tamil:'மஹாநாராயண தைலம்',cat:'Oils',emoji:'🫙',desc:'Classic Ayurvedic massage oil for muscles and joints relief',price:325,oldPrice:400,badge:'best',rating:4.9,reviews:198},
-  {id:11,name:'Moringa Green Tea',tamil:'முருங்கை பச்சை தேயிலை',cat:'Kadha',emoji:'🍵',desc:'Organic drumstick leaf tea rich in iron, calcium and vitamins',price:130,oldPrice:null,badge:'new',rating:4.7,reviews:88},
-  {id:12,name:'Saraswatarishta',tamil:'சரஸ்வதாரிஷ்டம்',cat:'Immunity',emoji:'🛡️',desc:'Classical brain tonic for memory, focus and nervous system',price:380,oldPrice:480,badge:null,rating:4.5,reviews:63},
-];
+const user = JSON.parse(localStorage.getItem('sv_user') || 'null');
 
-let cart=JSON.parse(localStorage.getItem('sv_cart')||'[]');
-
-function saveCart(){localStorage.setItem('sv_cart',JSON.stringify(cart));}
-function updateBadge(){document.getElementById('cartBadge').textContent=cart.reduce((s,i)=>s+i.qty,0);}
-
-function renderProducts(filter){
-  const grid=document.getElementById('productsGrid');
-  const list=filter==='All'?PRODUCTS:PRODUCTS.filter(p=>p.cat===filter);
-  grid.innerHTML=list.map(p=>`
-    <div class="product-card">
-      <div class="p-img">
-        ${p.emoji}
-        ${p.badge?`<span class="p-badge badge-${p.badge==='best'?'best':p.badge==='new'?'new':'sale'}">${p.badge==='best'?'⭐ Bestseller':p.badge==='new'?'✦ New':'Sale'}</span>`:''}
-      </div>
-      <div class="p-body">
-        <div class="p-cat">${p.cat}</div>
-        <div class="p-name">${p.name}</div>
-        <div class="p-tamil">${p.tamil}</div>
-        <div class="p-stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}<span> ${p.rating} (${p.reviews} reviews)</span></div>
-        <div class="p-desc">${p.desc}</div>
-        <div class="p-footer">
-          <div>
-            <span class="p-price">₹${p.price}</span>
-            ${p.oldPrice?`<span class="p-old">₹${p.oldPrice}</span>`:''}
-          </div>
-          <button class="add-btn" id="abtn${p.id}" onclick="addCart(${p.id})">Add to Cart</button>
+// ── NAV RIGHT ─────────────────────────────────────────────────
+(function(){
+  const nav = document.getElementById('navRight');
+  if (user) {
+    nav.innerHTML = `
+      <a href="shop.html" class="btn-shop">🛍️ My Shop</a>
+      <div style="position:relative">
+        <div style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 12px;border:1px solid var(--border);border-radius:20px;background:white" onclick="toggleUserMenu()">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--forest);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">${user.name.charAt(0).toUpperCase()}</div>
+          <span style="font-size:13px;color:var(--text)">${user.name.split(' ')[0]}</span>
+          <span style="font-size:10px;color:var(--muted)">▾</span>
         </div>
-      </div>
-    </div>`).join('');
-}
-
-function filterP(cat){
-  document.querySelectorAll('.fpill').forEach(b=>b.classList.toggle('active',b.textContent.trim().startsWith(cat==='All'?'All':cat)));
-  renderProducts(cat);
-  document.getElementById('products').scrollIntoView({behavior:'smooth'});
-}
-
-function addCart(id){
-  const p=PRODUCTS.find(x=>x.id===id);
-  const ex=cart.find(x=>x.id===id);
-  if(ex)ex.qty++;else cart.push({...p,qty:1});
-  saveCart();updateBadge();renderCartDrawer();
-  const btn=document.getElementById('abtn'+id);
-  if(btn){btn.textContent='✓ Added';btn.classList.add('added');setTimeout(()=>{btn.textContent='Add to Cart';btn.classList.remove('added');},1500);}
-  showToast(`${p.name} added to cart 🌿`);
-}
-
-function renderCartDrawer(){
-  const el=document.getElementById('cartItems');
-  const footer=document.getElementById('cartFooter');
-  if(!cart.length){
-    el.innerHTML=`<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty</p><p style="font-size:12px;margin-top:0.5rem">Add products to get started</p></div>`;
-    footer.style.display='none';return;
+        <div id="userMenu" style="display:none;position:absolute;top:44px;right:0;background:white;border:1px solid var(--border);border-radius:8px;padding:0.5rem;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.1);z-index:500">
+          <a href="shop.html" style="display:block;padding:8px 12px;font-size:13px;color:var(--text);text-decoration:none;border-radius:4px" onmouseover="this.style.background='#f5f0e8'" onmouseout="this.style.background=''">🛍️ Go to Shop</a>
+          <div onclick="logout()" style="padding:8px 12px;font-size:13px;color:#c0392b;cursor:pointer;border-radius:4px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background=''">🚪 Sign Out</div>
+        </div>
+      </div>`;
+  } else {
+    nav.innerHTML = `<a href="login.html" class="btn-signin">Sign In</a>`;
   }
-  footer.style.display='block';
-  el.innerHTML=cart.map(item=>`
-    <div class="cart-item">
-      <div class="cart-item-img">${item.emoji}</div>
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">₹${item.price}</div>
-        <div class="cart-item-qty">
-          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
-          <span class="qty-num">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
-          <button class="remove-btn" onclick="removeItem(${item.id})">🗑</button>
+})();
+
+// ── HERO BUTTONS ──────────────────────────────────────────────
+(function(){
+  const btns = document.getElementById('heroBtns');
+  if (user) {
+    btns.innerHTML = `<a href="shop.html" class="btn-primary">Go to Shop 🛍️</a><a href="#about" class="btn-ghost">Our Story</a>`;
+    document.getElementById('viewAllBtn').textContent = 'View All Products →';
+    document.getElementById('viewAllBtn').href = 'shop.html';
+  } else {
+    btns.innerHTML = `<a href="login.html" class="btn-primary">Sign In to Shop →</a><a href="#about" class="btn-ghost">Our Story</a>`;
+  }
+})();
+
+function toggleUserMenu(){
+  const m = document.getElementById('userMenu');
+  if(m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', e => {
+  const m = document.getElementById('userMenu');
+  if(m && !e.target.closest('[onclick="toggleUserMenu()"]')) m.style.display = 'none';
+});
+
+function logout(){
+  localStorage.removeItem('sv_user');
+  showToast('Signed out successfully');
+  setTimeout(() => location.reload(), 800);
+}
+
+// ── FEATURED PRODUCTS ─────────────────────────────────────────
+async function loadFeatured(){
+  const grid = document.getElementById('featuredGrid');
+  try {
+    const res  = await fetch('/api/products?featured=true');
+    const data = await res.json();
+    if (!data.success || !data.data.length) {
+      // fallback: show latest 4 products
+      const res2  = await fetch('/api/products');
+      const data2 = await res2.json();
+      const list  = (data2.data || []).slice(0, 4);
+      if (!list.length) {
+        grid.innerHTML = `<div class="no-featured"><h3>Products coming soon</h3><p>Our catalogue is being prepared. Check back soon!</p></div>`;
+        return;
+      }
+      renderFeatured(grid, list);
+    } else {
+      renderFeatured(grid, data.data);
+    }
+  } catch(e) {
+    grid.innerHTML = `<div class="no-featured"><h3>Products coming soon</h3><p>Our catalogue is being prepared.</p></div>`;
+  }
+}
+
+function renderFeatured(grid, list){
+  const loginUrl = user ? 'shop.html' : 'login.html';
+  const btnLabel = user ? 'Add to Cart' : 'Login to Buy';
+  grid.innerHTML = list.map(p => `
+    <div class="product-card">
+      <div class="p-img">${p.image ? `<img src="/uploads/${p.image}" alt="${p.name}">` : `<span style="font-size:72px">${p.emoji||'🌿'}</span>`}</div>
+      <div class="p-body">
+        <div class="p-cat">${p.cat||'Siddha'}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-desc">${(p.desc||'').slice(0,80)}${p.desc&&p.desc.length>80?'…':''}</div>
+        <div class="p-footer">
+          <span class="p-price">₹${p.price}</span>
+          <a href="${loginUrl}" class="login-to-buy">${btnLabel}</a>
         </div>
       </div>
     </div>`).join('');
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('cartTotal').textContent=`₹${total}`;
 }
 
-function changeQty(id,d){
-  const item=cart.find(x=>x.id===id);
-  if(item){item.qty+=d;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);}
-  saveCart();updateBadge();renderCartDrawer();
+// ── NEWSLETTER ────────────────────────────────────────────────
+async function subscribeNews(){
+  const email = document.getElementById('newsEmail').value.trim();
+  if (!email || !/\S+@\S+\.\S+/.test(email)) { showToast('Please enter a valid email'); return; }
+  try {
+    const res  = await fetch('/api/subscribers', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email}) });
+    const data = await res.json();
+    showToast(data.success ? '🌿 ' + data.message : (data.error || 'Could not subscribe'));
+    if (data.success) document.getElementById('newsEmail').value = '';
+  } catch(e) { showToast('Could not subscribe. Try again.'); }
 }
-function removeItem(id){cart=cart.filter(x=>x.id!==id);saveCart();updateBadge();renderCartDrawer();}
-function openCart(){document.getElementById('cartDrawer').classList.add('open');document.getElementById('overlay').classList.add('open');renderCartDrawer();}
-function closeCart(){document.getElementById('cartDrawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function subscribeNews(){showToast('Thank you for subscribing! 🌿');}
 
-renderProducts('All');
-updateBadge();
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+loadFeatured();
+
+// ── LOAD COUPON FROM ADMIN ─────────────────────────────────────
+async function loadPromo() {
+  try {
+    const res  = await fetch('/api/coupons');
+    const data = await res.json();
+    const coupons = (data.data || []).filter(c => c.active);
+    if (!coupons.length) {
+      document.getElementById('promoCodeBox').style.display = 'none';
+      document.getElementById('promoHeading').innerHTML = 'Pure Siddha,<br><em>Trusted Healing</em>';
+      document.getElementById('promoDesc').textContent = 'Welcome to the சித்த வளம் family. Sign in and shop our authentic herbal products.';
+      return;
+    }
+    const c = coupons[0]; // show first active coupon
+    const discText = c.type === 'percent' ? `${c.value}% Off!` : `₹${c.value} Off!`;
+    const minText  = c.minOrder > 0 ? `Min order ₹${c.minOrder}. ` : '';
+    const expText  = c.expiresAt ? `Valid till ${new Date(c.expiresAt).toLocaleDateString('en-IN')}.` : '';
+    document.getElementById('promoDiscount').textContent = discText;
+    document.getElementById('promoHeading').innerHTML = `Special Offer,<br><em>${discText}</em>`;
+    document.getElementById('promoDesc').textContent = `Welcome to the சித்த வளம் family. ${minText}${expText} Use the code below at checkout.`;
+    document.getElementById('promoCode').textContent = c.code;
+    document.getElementById('promoCodeBox').style.display = 'block';
+  } catch(e) {
+    document.getElementById('promoCodeBox').style.display = 'none';
+  }
+}
+
+function copyPromoCode() {
+  const code = document.getElementById('promoCode').textContent;
+  navigator.clipboard.writeText(code).then(() => showToast('Code ' + code + ' copied! 🎉'));
+}
+
+loadPromo();
 </script>
 </body>
 </html>

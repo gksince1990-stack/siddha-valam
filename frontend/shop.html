@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — சித்த வளம்</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --forest:#1E3A1E;--forest2:#2D5A2D;--saffron:#C8762A;--saffron-lt:#FDF0DC;
+  --cream:#FAF7F0;--gold:#D4A437;--bark:#6B4223;
+  --text:#1C1208;--muted:#7A6550;--border:#E2D5C0;--white:#fff;
+  --green-light:#EDF5E8;--amber:#F59E0B;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#F5F0E8;color:var(--text);overflow-x:hidden}
+
+/* ══ NAVBAR ══════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:rgba(250,247,240,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);box-shadow:0 2px 20px rgba(30,58,30,0.06)}
+.nav-logo{text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.nav-logo .t1{font-family:'Tiro Tamil',serif;font-size:19px;color:var(--forest)}
+.nav-logo .t2{font-size:9px;letter-spacing:3px;color:var(--saffron);text-transform:uppercase}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:14px;font-weight:400;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.on{color:var(--forest);font-weight:500}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* Cart button */
+.cart-pill{display:flex;align-items:center;gap:8px;background:var(--forest);color:white;border:none;padding:9px 18px 9px 14px;border-radius:30px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all 0.2s;position:relative}
+.cart-pill:hover{background:var(--forest2);transform:translateY(-1px)}
+.cart-icon{font-size:16px}
+.cart-count{background:var(--saffron);color:white;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:2px}
+
+/* User pill */
+.user-pill{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border:1.5px solid var(--border);border-radius:30px;background:white;cursor:pointer;transition:all 0.2s;position:relative}
+.user-pill:hover{border-color:var(--forest)}
+.u-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--forest),var(--forest2));color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.u-name{font-size:13px;color:var(--text);font-weight:500}
+.u-caret{font-size:10px;color:var(--muted)}
+.u-drop{position:absolute;top:46px;right:0;background:white;border:1px solid var(--border);border-radius:12px;padding:6px;min-width:190px;box-shadow:0 12px 32px rgba(0,0,0,0.12);display:none;z-index:500}
+.u-drop.open{display:block}
+.u-drop-head{padding:10px 12px 8px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.u-drop-head .nm{font-size:13px;font-weight:600;color:var(--text)}
+.u-drop-head .em{font-size:11px;color:var(--muted);margin-top:2px}
+.dd-row{display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:13px;color:var(--text);text-decoration:none;border-radius:8px;cursor:pointer;transition:background 0.15s}
+.dd-row:hover{background:var(--cream)}
+.dd-row.red{color:#c0392b}
+.dd-row.red:hover{background:#fff5f5}
+
+/* ══ HERO WELCOME ══════════════════════════════════════ */
+.welcome-strip{margin-top:66px;background:linear-gradient(135deg,#1E3A1E 0%,#2D5A2D 40%,#3a7a3a 70%,#1E3A1E 100%);padding:3.5rem 2.5rem;position:relative;overflow:hidden}
+.welcome-strip::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.welcome-orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.2}
+.orb-a{width:300px;height:300px;background:#D4A437;top:-80px;right:5%}
+.orb-b{width:200px;height:200px;background:#C8762A;bottom:-60px;left:10%}
+.orb-c{width:150px;height:150px;background:#5a9a5a;top:20%;right:25%}
+.welcome-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.welcome-text h2{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;color:white;line-height:1.2;margin-bottom:8px}
+.welcome-text h2 span{color:var(--gold)}
+.welcome-text p{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.6}
+.welcome-pills{display:flex;gap:10px;flex-wrap:wrap}
+.w-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);padding:8px 16px;border-radius:30px;font-size:13px;display:flex;align-items:center;gap:6px}
+
+/* ══ SEARCH BAR ══════════════════════════════════════ */
+.search-wrap{background:white;padding:1.25rem 2.5rem;border-bottom:1px solid var(--border);display:flex;gap:1rem;align-items:center;position:sticky;top:66px;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,0.04)}
+.search-box{flex:1;max-width:500px;position:relative}
+.search-box input{width:100%;padding:12px 44px 12px 44px;border:1.5px solid var(--border);border-radius:30px;font-size:14px;font-family:'DM Sans',sans-serif;background:#FAFAF8;outline:none;transition:all 0.2s;color:var(--text)}
+.search-box input:focus{border-color:var(--forest);background:white;box-shadow:0 0 0 3px rgba(30,58,30,0.06)}
+.search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted)}
+.search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);cursor:pointer;display:none}
+.sort-sel{padding:10px 16px;border:1.5px solid var(--border);border-radius:30px;font-size:13px;font-family:'DM Sans',sans-serif;background:white;color:var(--text);outline:none;cursor:pointer;transition:border-color 0.2s}
+.sort-sel:focus{border-color:var(--forest)}
+.results-count{font-size:13px;color:var(--muted);white-space:nowrap}
+
+/* ══ CATEGORY SCROLLSTRIP ═══════════════════════════ */
+.cat-strip{padding:1.5rem 2.5rem;background:white;border-bottom:1px solid var(--border);overflow-x:auto;display:flex;gap:0.75rem;scrollbar-width:none}
+.cat-strip::-webkit-scrollbar{display:none}
+.cat-chip{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 20px;border-radius:14px;border:2px solid var(--border);cursor:pointer;transition:all 0.2s;min-width:90px;background:white;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.cat-chip:hover{border-color:var(--forest);transform:translateY(-2px);box-shadow:0 6px 20px rgba(30,58,30,0.1)}
+.cat-chip.active{border-color:var(--forest);background:var(--forest);color:white}
+.cat-chip.active .cat-chip-icon{filter:brightness(10)}
+.cat-chip-icon{font-size:24px}
+.cat-chip-name{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap}
+.cat-chip.active .cat-chip-name{color:white}
+
+/* ══ PRODUCTS SECTION ════════════════════════════════ */
+.products-section{padding:2rem 2.5rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.section-head h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--forest);font-weight:600}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.25rem}
+
+/* Product card */
+.p-card{background:white;border-radius:16px;overflow:hidden;transition:all 0.25s;border:1px solid rgba(226,213,192,0.6);position:relative}
+.p-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(30,58,30,0.13);border-color:var(--border)}
+.p-card-img{height:200px;background:linear-gradient(135deg,#EDF5E8,#F5F0E8);display:flex;align-items:center;justify-content:center;font-size:76px;position:relative;overflow:hidden}
+.p-card-img img{width:100%;height:100%;object-fit:cover}
+.p-card-badge{position:absolute;top:12px;left:12px;font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase}
+.badge-best{background:linear-gradient(135deg,#FDF0DC,#fde8b8);color:#8B4513;border:1px solid rgba(200,118,42,0.3)}
+.badge-new{background:linear-gradient(135deg,#E8F5E8,#d0ead0);color:#1E5C1E;border:1px solid rgba(30,92,30,0.2)}
+.badge-sale{background:linear-gradient(135deg,#FDE8D8,#fcd5bb);color:#B85000;border:1px solid rgba(184,80,0,0.2)}
+.p-card-body{padding:1.1rem 1.25rem 1.25rem}
+.p-card-cat{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--saffron);margin-bottom:5px;font-weight:600}
+.p-card-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.25}
+.p-card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.p-card-stock-low{font-size:11px;color:#B85000;font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.p-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.p-card-price{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--forest);line-height:1}
+.add-btn{background:linear-gradient(135deg,var(--forest),var(--forest2));color:white;border:none;padding:9px 18px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap}
+.add-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(30,58,30,0.3)}
+.add-btn.added{background:linear-gradient(135deg,var(--saffron),#d4892e)}
+.add-btn.soldout{background:linear-gradient(135deg,#ccc,#bbb);cursor:not-allowed;color:#888}
+
+/* Empty state */
+.empty-state{grid-column:1/-1;text-align:center;padding:5rem 2rem}
+.empty-icon{font-size:64px;margin-bottom:1rem;opacity:0.4}
+.empty-state h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--forest);margin-bottom:0.5rem}
+.empty-state p{font-size:14px;color:var(--muted)}
+
+/* ══ SPECIAL OFFER STRIP ════════════════════════════ */
+.offer-strip{margin:0 2.5rem 2rem;background:linear-gradient(135deg,#C8762A,#D4893A,#E8A85A);border-radius:16px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative;overflow:hidden}
+.offer-strip::after{content:'🌿';position:absolute;right:3%;font-size:80px;opacity:0.15}
+.offer-text h4{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:white;margin-bottom:4px}
+.offer-text p{font-size:13px;color:rgba(255,255,255,0.8)}
+.offer-code{background:rgba(255,255,255,0.2);border:2px dashed rgba(255,255,255,0.6);border-radius:10px;padding:10px 20px;text-align:center}
+.offer-code .oc-label{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.7);text-transform:uppercase}
+.offer-code .oc-code{font-size:22px;font-weight:700;color:white;letter-spacing:4px}
+
+/* ══ ABOUT SECTION ══════════════════════════════════ */
+.about-section{margin:0 2.5rem 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.about-card{background:white;border-radius:16px;padding:2rem;border:1px solid var(--border)}
+.about-card.dark{background:var(--forest);color:white;border-color:var(--forest)}
+.about-card h4{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:0.75rem}
+.about-card.dark h4{color:white}
+.about-card p{font-size:14px;color:var(--muted);line-height:1.8}
+.about-card.dark p{color:rgba(255,255,255,0.65)}
+.about-values{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.25rem}
+.av-item{background:#F8F5F0;border-radius:10px;padding:12px;display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border)}
+.av-icon{font-size:20px;flex-shrink:0}
+.av-text .t{font-size:13px;font-weight:500;color:var(--text)}
+.av-text .s{font-size:11px;color:var(--muted);margin-top:2px}
+.dark-stats{display:flex;gap:2rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.15)}
+.ds-item .n{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);font-weight:600}
+.ds-item .l{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+
+/* ══ NEWSLETTER ════════════════════════════════════ */
+.newsletter{margin:0 2.5rem 2.5rem;background:linear-gradient(135deg,#F8F3EC,#FDF0DC);border:1px solid rgba(200,118,42,0.2);border-radius:16px;padding:2.5rem;text-align:center}
+.newsletter h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--forest);margin-bottom:0.5rem}
+.newsletter p{font-size:14px;color:var(--muted);margin-bottom:1.5rem}
+.nl-form{display:flex;gap:0.75rem;max-width:420px;margin:0 auto}
+.nl-form input{flex:1;padding:12px 18px;border:1.5px solid var(--border);border-radius:30px;font-size:14px;font-family:'DM Sans',sans-serif;background:white;outline:none;transition:border-color 0.2s}
+.nl-form input:focus{border-color:var(--forest)}
+.nl-form button{background:var(--saffron);color:white;border:none;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background 0.2s}
+.nl-form button:hover{background:#a85e20}
+
+/* ══ FOOTER ════════════════════════════════════════ */
+footer{background:var(--text);color:rgba(255,255,255,0.55);padding:2.5rem 2.5rem 1.25rem;margin-top:0.5rem}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-bottom:1.25rem;border-bottom:1px solid rgba(255,255,255,0.1)}
+.footer-brand .ft{font-family:'Tiro Tamil',serif;font-size:18px;color:white}
+.footer-brand .fe{font-size:9px;letter-spacing:3px;color:var(--saffron);text-transform:uppercase}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap}
+.footer-links a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:13px;transition:color 0.2s}
+.footer-links a:hover{color:white}
+.footer-bottom{padding-top:1rem;display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:0.5rem}
+
+/* ══ CART DRAWER ════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:400;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:400px;background:white;z-index:401;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.15)}
+.cart-drawer.open{transform:translateX(0)}
+.cd-head{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cd-head h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest)}
+.cd-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background 0.15s}
+.cd-close:hover{background:var(--cream)}
+.cd-items{flex:1;overflow-y:auto;padding:1.25rem}
+.cd-empty{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.cd-empty-icon{font-size:52px;margin-bottom:1rem;opacity:0.4}
+.cd-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.cd-item:last-child{border-bottom:none}
+.cd-item-img{width:64px;height:64px;background:var(--saffron-lt);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden}
+.cd-item-img img{width:100%;height:100%;object-fit:cover}
+.cd-item-info{flex:1}
+.cd-item-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.cd-item-price{font-size:12px;color:var(--muted)}
+.cd-qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty-btn{width:28px;height:28px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-weight:600}
+.qty-btn:hover{border-color:var(--forest);background:var(--forest);color:white}
+.qty-num{font-size:14px;font-weight:600;min-width:22px;text-align:center}
+.cd-item-sub{font-size:14px;font-weight:600;color:var(--forest);align-self:flex-start;margin-top:4px}
+.cd-foot{padding:1.25rem;border-top:1px solid var(--border);background:#FAFAF8}
+.cd-subtotal{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+.cd-total{display:flex;justify-content:space-between;font-size:16px;font-weight:600;color:var(--text);margin-bottom:1rem}
+.cd-total span:last-child{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest)}
+.checkout-btn{width:100%;background:linear-gradient(135deg,var(--forest),var(--forest2));color:white;border:none;padding:15px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;letter-spacing:0.3px}
+.checkout-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(30,58,30,0.3)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest);color:white;padding:12px 24px;border-radius:30px;font-size:14px;opacity:0;transition:all 0.3s;z-index:600;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:768px){
+  .welcome-inner{flex-direction:column}
+  .about-section{grid-template-columns:1fr}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .cart-drawer{width:100%}
+  .nl-form{flex-direction:column}
+  nav{padding:0 1rem}
+  .nav-links{display:none}
+  .products-section,.offer-strip,.about-section,.newsletter{padding-left:1rem;padding-right:1rem;margin-left:0;margin-right:0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="t1">சித்த வளம்</span>
+    <span class="t2">Siddha Valam</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#products" class="on">Shop</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <!-- Cart -->
+    <button class="cart-pill" onclick="openCart()">
+      <span class="cart-icon">🛒</span>
+      Cart
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <!-- User -->
+    <div class="user-pill" onclick="toggleDrop()" id="userPill">
+      <div class="u-avatar" id="uAvatar">?</div>
+      <span class="u-name" id="uName">Account</span>
+      <span class="u-caret">▾</span>
+      <div class="u-drop" id="uDrop">
+        <div class="u-drop-head">
+          <div class="nm" id="ddName">—</div>
+          <div class="em" id="ddEmail">—</div>
+        </div>
+        <a href="index.html" class="dd-row">🏠 Home</a>
+        <a href="#" class="dd-row" onclick="openCart();return false">🛒 My Cart</a>
+        <div class="dd-row red" onclick="logout()">🚪 Sign Out</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- WELCOME HERO -->
+<div class="welcome-strip">
+  <div class="welcome-orb orb-a"></div>
+  <div class="welcome-orb orb-b"></div>
+  <div class="welcome-orb orb-c"></div>
+  <div class="welcome-inner">
+    <div class="welcome-text">
+      <h2>Welcome back, <span id="welcomeName">Friend</span>! 🌿</h2>
+      <p>Explore our collection of authentic Siddha & Ayurvedic products</p>
+    </div>
+    <div class="welcome-pills">
+      <div class="w-pill">🚚 Free delivery over ₹499</div>
+      <div class="w-pill">🌱 100% Organic</div>
+      <div class="w-pill">✓ Lab Tested</div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search products…" oninput="handleSearch(this.value)">
+    <span class="search-clear" id="searchClear" onclick="clearSearch()">✕</span>
+  </div>
+  <select class="sort-sel" id="sortSel" onchange="sortProducts()">
+    <option value="">Sort by</option>
+    <option value="low">Price: Low to High</option>
+    <option value="high">Price: High to Low</option>
+    <option value="name">Name A–Z</option>
+  </select>
+  <span class="results-count" id="resultsCount"></span>
+</div>
+
+<!-- CATEGORY CHIPS -->
+<div class="cat-strip" id="catStrip">
+  <div class="cat-chip active" onclick="filterCat('All',this)">
+    <span class="cat-chip-icon">🌿</span>
+    <span class="cat-chip-name">All</span>
+  </div>
+  <div class="cat-chip" onclick="filterCat('Oils',this)">
+    <span class="cat-chip-icon">🧴</span>
+    <span class="cat-chip-name">Herbal Oils</span>
+  </div>
+  <div class="cat-chip" onclick="filterCat('Churna',this)">
+    <span class="cat-chip-icon">🌾</span>
+    <span class="cat-chip-name">Churna</span>
+  </div>
+  <div class="cat-chip" onclick="filterCat('Kadha',this)">
+    <span class="cat-chip-icon">🍵</span>
+    <span class="cat-chip-name">Kadha & Tea</span>
+  </div>
+  <div class="cat-chip" onclick="filterCat('Skin',this)">
+    <span class="cat-chip-icon">✨</span>
+    <span class="cat-chip-name">Skin & Beauty</span>
+  </div>
+  <div class="cat-chip" onclick="filterCat('Ghee',this)">
+    <span class="cat-chip-icon">🧈</span>
+    <span class="cat-chip-name">Herbal Ghee</span>
+  </div>
+  <div class="cat-chip" onclick="filterCat('Immunity',this)">
+    <span class="cat-chip-icon">🛡️</span>
+    <span class="cat-chip-name">Immunity</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products-section" id="products">
+  <div class="section-head">
+    <h3 id="sectionTitle">All Products</h3>
+  </div>
+  <div class="products-grid" id="productsGrid">
+    <div class="empty-state"><div class="empty-icon">🌿</div><h3>Loading products…</h3></div>
+  </div>
+</div>
+
+<!-- OFFER STRIP — loaded dynamically from admin coupons -->
+<div id="offerStrip"></div>
+
+<!-- ABOUT -->
+<div class="about-section" id="about">
+  <div class="about-card">
+    <h4>Who We Are</h4>
+    <p>சித்த வளம் (Siddha Valam) was born from a belief that the ancient healing wisdom of Tamil Nadu deserves to reach every home. We source herbs directly from traditional Siddha practitioners and certified organic farms.</p>
+    <div class="about-values">
+      <div class="av-item"><span class="av-icon">🌱</span><div class="av-text"><div class="t">100% Organic</div><div class="s">No synthetic additives</div></div></div>
+      <div class="av-item"><span class="av-icon">🔬</span><div class="av-text"><div class="t">Lab Tested</div><div class="s">Every batch verified</div></div></div>
+      <div class="av-item"><span class="av-icon">🚚</span><div class="av-text"><div class="t">Fast Delivery</div><div class="s">2–4 days Tamil Nadu</div></div></div>
+      <div class="av-item"><span class="av-icon">↩️</span><div class="av-text"><div class="t">Easy Returns</div><div class="s">30-day policy</div></div></div>
+    </div>
+  </div>
+  <div class="about-card dark">
+    <h4>Rooted in Tamil Siddha Tradition</h4>
+    <p>Every product is prepared following classical Siddha texts — the same formulations used by Tamil healers for over 5,000 years. No shortcuts. No synthetic additives. Only pure, authentic medicine.</p>
+    <p style="margin-top:0.75rem;font-style:italic;font-size:13px;color:rgba(255,255,255,0.5)">"உடலை காக்கும் மருந்து இயற்கையிலிருந்தே வரும்"</p>
+    <div class="dark-stats">
+      <div class="ds-item"><div class="n">500+</div><div class="l">Products</div></div>
+      <div class="ds-item"><div class="n">12K+</div><div class="l">Customers</div></div>
+      <div class="ds-item"><div class="n">5000</div><div class="l">Yrs Heritage</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter" id="contact">
+  <h3>Stay Connected with Nature 🌿</h3>
+  <p>Subscribe for Ayurvedic tips, new product launches and exclusive offers</p>
+  <div class="nl-form">
+    <input type="email" id="nlEmail" placeholder="Enter your email address">
+    <button onclick="subscribe()">Subscribe</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="ft">சித்த வளம்</div>
+      <div class="fe">Siddha Valam</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="tel:+919384858316">📞 +91 93848 58316</a>
+      <a href="mailto:gksince1990@gmail.com">✉️ gksince1990@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 சித்த வளம். All rights reserved.</span>
+    <span>Made with 🌿 in Tamil Nadu</span>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cd-head">
+    <h3>Your Cart 🛒</h3>
+    <button class="cd-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cd-items" id="cdItems"></div>
+  <div id="cdFoot" style="display:none">
+    <div class="cd-foot">
+      <div class="cd-subtotal"><span>Subtotal</span><span id="cdSub">₹0</span></div>
+      <div class="cd-subtotal"><span>Shipping</span><span id="cdShip">₹60</span></div>
+      <div class="cd-total"><span>Total</span><span id="cdTotal">₹0</span></div>
+      <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── AUTH GUARD ─────────────────────────────────────────────
+const user = JSON.parse(localStorage.getItem('sv_user') || 'null');
+if (!user) window.location.href = 'login.html';
+
+// ── USER DISPLAY ───────────────────────────────────────────
+if (user) {
+  const first = user.name.split(' ')[0];
+  document.getElementById('welcomeName').textContent = first;
+  document.getElementById('uAvatar').textContent     = user.name.charAt(0).toUpperCase();
+  document.getElementById('uName').textContent       = first;
+  document.getElementById('ddName').textContent      = user.name;
+  document.getElementById('ddEmail').textContent     = user.email || user.phone || '';
+}
+
+function toggleDrop() { document.getElementById('uDrop').classList.toggle('open'); }
+document.addEventListener('click', e => {
+  if (!e.target.closest('#userPill')) document.getElementById('uDrop').classList.remove('open');
+});
+function logout() {
+  localStorage.removeItem('sv_user');
+  localStorage.removeItem('sv_cart');
+  showToast('Signed out. See you soon! 🌿');
+  setTimeout(() => window.location.href = 'index.html', 900);
+}
+
+// ── CART ───────────────────────────────────────────────────
+let cart = JSON.parse(localStorage.getItem('sv_cart') || '[]');
+function saveCart()    { localStorage.setItem('sv_cart', JSON.stringify(cart)); }
+function updateBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cartCount').textContent = total;
+}
+function openCart()  { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); renderCart(); }
+function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+
+function renderCart() {
+  const el   = document.getElementById('cdItems');
+  const foot = document.getElementById('cdFoot');
+  if (!cart.length) {
+    el.innerHTML = `<div class="cd-empty"><div class="cd-empty-icon">🛒</div><p>Your cart is empty</p><p style="font-size:12px;margin-top:6px;color:var(--muted)">Browse our products and add something!</p></div>`;
+    foot.style.display = 'none'; return;
+  }
+  foot.style.display = 'block';
+  el.innerHTML = cart.map((item, idx) => `
+    <div class="cd-item">
+      <div class="cd-item-img">${item.image ? `<img src="/uploads/${item.image}">` : item.emoji || '🌿'}</div>
+      <div class="cd-item-info">
+        <div class="cd-item-name">${item.name}</div>
+        <div class="cd-item-price">₹${item.price} each</div>
+        <div class="cd-qty">
+          <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+        </div>
+      </div>
+      <div class="cd-item-sub">₹${item.price * item.qty}</div>
+    </div>`).join('');
+  const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const ship = sub >= 499 ? 0 : 60;
+  document.getElementById('cdSub').textContent   = `₹${sub}`;
+  document.getElementById('cdShip').textContent  = ship === 0 ? 'FREE 🎉' : `₹${ship}`;
+  document.getElementById('cdTotal').textContent = `₹${sub + ship}`;
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  saveCart(); updateBadge(); renderCart();
+}
+
+function addToCart(p) {
+  const id  = p._id || p.id;
+  const idx = cart.findIndex(i => i.id === id);
+  if (idx >= 0) { cart[idx].qty++; } else {
+    cart.push({ id, name: p.name, emoji: p.emoji || '🌿', image: p.image || '', price: p.price, qty: 1 });
+  }
+  saveCart(); updateBadge();
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.textContent = '✓ Added!'; btn.classList.add('added'); setTimeout(() => { btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1200); }
+  showToast(`${p.name} added to cart 🛒`);
+}
+
+// ── PRODUCTS ───────────────────────────────────────────────
+let ALL  = [];
+let VIEW = [];
+let currentCat = 'All';
+
+async function loadProducts() {
+  try {
+    const res  = await fetch('/api/products');
+    const data = await res.json();
+    if (data.success) {
+      ALL = data.data;
+      const validIds = new Set(ALL.map(p => p._id || p.id));
+      cart = cart.filter(i => validIds.has(i.id));
+      saveCart(); updateBadge();
+    }
+  } catch(e) {}
+  applyFilters();
+}
+
+function applyFilters() {
+  const q    = (document.getElementById('searchInput').value || '').toLowerCase();
+  const sort = document.getElementById('sortSel').value;
+  let list = currentCat === 'All' ? [...ALL] : ALL.filter(p => p.cat === currentCat);
+  if (q) list = list.filter(p => p.name.toLowerCase().includes(q) || (p.desc||'').toLowerCase().includes(q));
+  if (sort === 'low')  list.sort((a,b) => a.price - b.price);
+  if (sort === 'high') list.sort((a,b) => b.price - a.price);
+  if (sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+  VIEW = list;
+  document.getElementById('resultsCount').textContent = list.length ? `${list.length} product${list.length>1?'s':''}` : '';
+  document.getElementById('sectionTitle').textContent = currentCat === 'All' ? 'All Products' : currentCat;
+  renderGrid(list);
+}
+
+function renderGrid(list) {
+  const grid = document.getElementById('productsGrid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🌿</div><h3>${ALL.length ? 'No products found' : 'No products yet'}</h3><p>${ALL.length ? 'Try a different search or category' : 'Products will appear here once added from the admin panel.'}</p></div>`;
+    return;
+  }
+  const bmap = { best:'⭐ Bestseller', new:'✦ New', sale:'Sale' };
+  grid.innerHTML = list.map(p => {
+    const id      = p._id || p.id;
+    const soldOut = p.stock <= 0;
+    const low     = p.stock > 0 && p.stock <= 5;
+    return `<div class="p-card">
+      <div class="p-card-img">
+        ${p.badge ? `<div class="p-card-badge badge-${p.badge}">${bmap[p.badge]||p.badge}</div>` : ''}
+        ${p.image ? `<img src="/uploads/${p.image}" alt="${p.name}">` : `<span style="font-size:76px">${p.emoji||'🌿'}</span>`}
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-cat">${p.cat||'Siddha'}</div>
+        <div class="p-card-name">${p.name}</div>
+        ${low ? `<div class="p-card-stock-low">⚠️ Only ${p.stock} left!</div>` : ''}
+        <div class="p-card-desc">${(p.desc||'').slice(0,75)}${(p.desc||'').length>75?'…':''}</div>
+        <div class="p-card-footer">
+          <span class="p-card-price">₹${p.price}</span>
+          ${soldOut
+            ? `<button class="add-btn soldout" disabled>Sold Out</button>`
+            : `<button class="add-btn" id="btn-${id}" onclick='addToCart(${JSON.stringify(p)})'>Add to Cart</button>`}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+  document.getElementById('products').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function handleSearch(val) {
+  document.getElementById('searchClear').style.display = val ? 'block' : 'none';
+  applyFilters();
+}
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  applyFilters();
+}
+function sortProducts() { applyFilters(); }
+
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(() => showToast('Code ' + code + ' copied! 🎉'));
+}
+
+async function loadCoupons() {
+  const strip = document.getElementById('offerStrip');
+  try {
+    const res  = await fetch('/api/coupons');
+    const data = await res.json();
+    const coupons = (data.data || []).filter(c => c.active);
+    if (!coupons.length) { strip.innerHTML = ''; return; }
+
+    strip.innerHTML = coupons.map(c => {
+      const discText = c.type === 'percent' ? `${c.value}% Off!` : `₹${c.value} Off!`;
+      const minText  = c.minOrder > 0 ? `Min order ₹${c.minOrder}` : 'No minimum order';
+      const expText  = c.expiresAt ? `Valid till ${new Date(c.expiresAt).toLocaleDateString('en-IN')}` : '';
+      return `
+        <div class="offer-strip" style="margin-bottom:1rem">
+          <div class="offer-text">
+            <h4>Special Offer — ${discText}</h4>
+            <p>${minText}${expText ? ' · ' + expText : ''}</p>
+          </div>
+          <div class="offer-code" onclick="copyCode('${c.code}')" style="cursor:pointer" title="Click to copy">
+            <div class="oc-label">Discount Code</div>
+            <div class="oc-code">${c.code}</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:3px">Click to copy</div>
+          </div>
+        </div>`;
+    }).join('');
+  } catch(e) {
+    strip.innerHTML = '';
+  }
+}
+
+async function subscribe() {
+  const email = document.getElementById('nlEmail').value.trim();
+  if (!email || !/\S+@\S+\.\S+/.test(email)) { showToast('Please enter a valid email'); return; }
+  try {
+    const res  = await fetch('/api/subscribers', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email}) });
+    const data = await res.json();
+    showToast(data.success ? '🌿 ' + data.message : (data.error || 'Could not subscribe'));
+    if (data.success) document.getElementById('nlEmail').value = '';
+  } catch(e) { showToast('Could not subscribe. Try again.'); }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+loadProducts();
+loadCoupons();
+</script>
+</body>
+</html>

@@ -63,7 +63,7 @@ h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest);mar
 <body>
 <nav>
   <div><div class="logo-tamil">சித்த வளம்</div><div class="logo-en">Siddha Valam</div></div>
-  <a href="index.html" class="back-link">← Continue Shopping</a>
+  <a href="shop.html" class="back-link">← Continue Shopping</a>
 </nav>
 
 <div class="checkout-wrap" id="checkoutWrap">
@@ -141,6 +141,10 @@ h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest);mar
 <div class="toast" id="toast"></div>
 
 <script>
+// Auth guard
+const _u = JSON.parse(localStorage.getItem('sv_user')||'null');
+if (!_u) { window.location.href = 'login.html'; }
+
 let cart=JSON.parse(localStorage.getItem('sv_cart')||'[]');
 let payMethod='razorpay';
 let discount=0;
@@ -161,12 +165,12 @@ function calcTotals(){
 
 function renderSummary(){
   if(!cart.length){
-    document.getElementById('checkoutWrap').innerHTML=`<div class="empty-cart"><h3>Your cart is empty</h3><p>Add some products before checking out</p><a href="index.html" class="go-shop">Go Shopping</a></div>`;
+    document.getElementById('checkoutWrap').innerHTML=`<div class="empty-cart"><h3>Your cart is empty</h3><p>Add some products before checking out</p><a href="shop.html" class="go-shop">Go Shopping</a></div>`;
     return;
   }
   document.getElementById('summaryItems').innerHTML=cart.map(i=>`
     <div class="cart-line">
-      <div class="item-img">${i.emoji}</div>
+      <div class="item-img">${i.image?`<img src="/uploads/${i.image}" style="width:100%;height:100%;object-fit:cover;border-radius:6px">`:i.emoji||'🌿'}</div>
       <div class="item-detail">
         <div class="item-name">${i.name}</div>
         <div class="item-qty">Qty: ${i.qty}</div>
@@ -176,14 +180,39 @@ function renderSummary(){
   calcTotals();
 }
 
-function applyCoupon(){
+async function applyCoupon(){
   const code=document.getElementById('couponInput').value.trim().toUpperCase();
-  if(code==='SIDDHA20'){
-    discount=0.2;
-    document.getElementById('couponMsg').style.display='block';
-    calcTotals();showToast('Coupon applied! 20% off 🎉');
-  } else {
-    showToast('Invalid coupon code');
+  if(!code){showToast('Enter a coupon code');return;}
+  const {sub}=calcTotals();
+  try{
+    const res=await fetch('/api/coupons/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,cartTotal:sub})});
+    const data=await res.json();
+    if(data.success){
+      if(data.type==='percent'){
+        discount=data.value/100;
+      } else {
+        // flat discount — store as fraction
+        discount=data.value/sub;
+      }
+      const msg=document.getElementById('couponMsg');
+      msg.textContent=`✓ ${data.type==='percent'?data.value+'% discount':('₹'+data.value+' off')} applied!`;
+      msg.style.display='block';
+      calcTotals();
+      showToast('Coupon applied! 🎉');
+    } else {
+      showToast(data.error||'Invalid coupon code');
+    }
+  }catch(e){
+    // fallback: check hardcoded SIDDHA20 if API unavailable
+    if(code==='SIDDHA20'){
+      discount=0.2;
+      const msg=document.getElementById('couponMsg');
+      msg.textContent='✓ 20% discount applied!';
+      msg.style.display='block';
+      calcTotals();showToast('Coupon applied! 20% off 🎉');
+    } else {
+      showToast('Invalid coupon code');
+    }
   }
 }
 
@@ -244,12 +273,43 @@ async function placeOrder(){
   // Razorpay payment
   const btn=document.getElementById('placeBtn');
   btn.disabled=true;btn.textContent='Processing...';
+
+  // ── SANDBOX / TEST MODE ──────────────────────────────────
+  // If Razorpay keys are not configured yet, save the order
+  // as a "Test Payment" and go to success page.
+  async function saveOrderAndRedirect(label){
+    try{
+      const res=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...orderData,status:'pending',paymentStatus:label})});
+      const data=await res.json();
+      if(data.success){
+        localStorage.removeItem('sv_cart');
+        window.location.href=`order-success.html?id=${data.orderId}`;
+        return;
+      }
+    }catch(e){}
+    localStorage.removeItem('sv_cart');
+    window.location.href='order-success.html?id=TEST'+Date.now();
+  }
+
   try{
+    // Check if Razorpay keys are configured
+    const cfgRes=await fetch('/api/config');
+    const cfg=await cfgRes.json();
+
+    if(!cfg.razorpayReady){
+      // SANDBOX: no real keys — save order & simulate success
+      showToast('🧪 Sandbox mode: simulating payment...');
+      setTimeout(()=>saveOrderAndRedirect('sandbox-test'),1200);
+      return;
+    }
+
     // Create order on backend
     const res=await fetch('/api/orders/create-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:grand*100,currency:'INR',orderData})});
     const data=await res.json();
+    if(!data.success) throw new Error(data.error);
+
     const options={
-      key: 'YOUR_RAZORPAY_KEY_ID', // Replace with your key
+      key: cfg.razorpayKeyId,
       amount: grand*100,
       currency:'INR',
       name:'சித்த வளம்',
@@ -258,23 +318,61 @@ async function placeOrder(){
       prefill:{name:orderData.customer.name,email:orderData.customer.email,contact:orderData.customer.phone},
       theme:{color:'#1E3A1E'},
       handler:async function(response){
-        // Verify payment
         await fetch('/api/orders/verify-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...response,orderData})});
         localStorage.removeItem('sv_cart');
-        window.location.href=`order-success.html?id=${response.razorpay_order_id}`;
+        window.location.href=`order-success.html?id=${data.orderId}`;
       },
       modal:{ondismiss:function(){btn.disabled=false;btn.textContent='Place Order →';}}
     };
     const rzp=new window.Razorpay(options);
     rzp.open();
   }catch(e){
-    showToast('Starting demo payment (connect backend for real payments)');
-    setTimeout(()=>{localStorage.removeItem('sv_cart');window.location.href='order-success.html?id=DEMO123';},2000);
-    btn.disabled=false;btn.textContent='Place Order →';
+    console.error('Payment error:',e);
+    showToast('Something went wrong. Saving order...');
+    setTimeout(()=>saveOrderAndRedirect('failed-fallback'),1500);
   }
 }
 
 renderSummary();
+autoFillUser();
+
+function autoFillUser(){
+  const u=JSON.parse(localStorage.getItem('sv_user')||'null');
+  if(!u)return;
+  const nameParts=(u.name||'').trim().split(' ');
+  const fn=document.getElementById('fname');
+  const ln=document.getElementById('lname');
+  if(fn)fn.value=nameParts[0]||'';
+  if(ln)ln.value=nameParts.slice(1).join(' ')||'';
+  const ph=document.getElementById('phone');
+  if(ph&&u.phone)ph.value=u.phone;
+  const em=document.getElementById('email');
+  if(em&&u.email)em.value=u.email;
+}
+
+// Update nav to show user or sign-in
+(function(){
+  const nav=document.querySelector('nav');
+  const u=JSON.parse(localStorage.getItem('sv_user')||'null');
+  const userBtn=document.createElement('div');
+  userBtn.style.cssText='display:flex;align-items:center;gap:10px';
+  if(u){
+    userBtn.innerHTML=`
+      <a href="shop.html" style="font-size:13px;color:var(--muted);text-decoration:none">← Back to Shop</a>
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;border:1px solid var(--border);border-radius:20px;background:white">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--forest);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">${u.name.charAt(0).toUpperCase()}</div>
+        <span style="font-size:13px;color:var(--text)">${u.name.split(' ')[0]}</span>
+      </div>
+      <button onclick="logoutCheckout()" style="background:none;border:1px solid #fecaca;color:#c0392b;padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif">Sign Out</button>`;
+  }
+  nav.appendChild(userBtn);
+})();
+
+function logoutCheckout(){
+  localStorage.removeItem('sv_user');
+  localStorage.removeItem('sv_cart');
+  window.location.href='index.html';
+}
 </script>
 </body>
 </html>

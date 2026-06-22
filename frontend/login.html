@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — சித்த வளம்</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Tamil:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --forest:#1E3A1E;--forest2:#2D5A2D;--forest3:#3A6B3A;
+  --saffron:#C8762A;--saffron-lt:#FDF0DC;
+  --cream:#FAF7F0;--gold:#D4A437;--gold2:#E8C56A;
+  --text:#1C1208;--muted:#7A6550;--border:#E2D5C0;--white:#FFFFFF;
+}
+
+html,body{height:100%;font-family:'DM Sans',sans-serif;overflow:hidden}
+
+/* ── LAYOUT ──────────────────────────────────────── */
+.wrap{display:grid;grid-template-columns:1fr 1fr;height:100vh}
+
+/* ── LEFT PANEL ──────────────────────────────────── */
+.left{background:var(--forest);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:4rem;overflow:hidden}
+
+/* Animated background orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.18;animation:drift 8s ease-in-out infinite}
+.orb1{width:400px;height:400px;background:var(--gold);top:-100px;right:-100px;animation-delay:0s}
+.orb2{width:300px;height:300px;background:var(--saffron);bottom:-80px;left:-80px;animation-delay:-3s}
+.orb3{width:200px;height:200px;background:#5a9a5a;top:50%;left:30%;animation-delay:-6s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.1)}}
+
+/* Leaf decorations */
+.leaf-deco{position:absolute;opacity:0.12;font-size:120px;user-select:none;animation:leafFloat 6s ease-in-out infinite}
+.leaf1{top:8%;right:10%;animation-delay:0s;transform:rotate(-20deg)}
+.leaf2{bottom:15%;right:20%;font-size:80px;animation-delay:-2s;transform:rotate(15deg)}
+.leaf3{top:45%;right:5%;font-size:60px;animation-delay:-4s;transform:rotate(-35deg)}
+@keyframes leafFloat{0%,100%{transform:translateY(0) rotate(-20deg)}50%{transform:translateY(-15px) rotate(-15deg)}}
+
+/* Grid pattern */
+.grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px}
+
+.left-content{position:relative;z-index:2}
+.brand-mark{display:flex;align-items:center;gap:12px;margin-bottom:3rem}
+.brand-circle{width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(212,164,55,0.5);display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(212,164,55,0.08)}
+.brand-text .t1{font-family:'Tiro Tamil',serif;font-size:18px;color:white;line-height:1}
+.brand-text .t2{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-top:2px}
+
+.left-headline{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:white;line-height:1.1;margin-bottom:1.5rem}
+.left-headline em{color:var(--gold2);font-style:italic;font-weight:400}
+.left-sub{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.8;max-width:380px;margin-bottom:3rem}
+
+/* Stats row */
+.stats-row{display:flex;gap:2.5rem}
+.stat{border-left:1px solid rgba(212,164,55,0.3);padding-left:1rem}
+.stat .n{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold2);font-weight:600}
+.stat .l{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.5px;margin-top:2px}
+
+/* Testimonial pill */
+.testi-pill{margin-top:3.5rem;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1rem 1.25rem;max-width:380px;backdrop-filter:blur(4px)}
+.testi-stars{color:var(--gold2);font-size:12px;margin-bottom:6px}
+.testi-quote{font-size:13px;color:rgba(255,255,255,0.75);font-style:italic;line-height:1.6;margin-bottom:8px}
+.testi-author{display:flex;align-items:center;gap:8px}
+.testi-avatar{width:28px;height:28px;border-radius:50%;background:var(--gold2);color:var(--forest);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.testi-name{font-size:12px;color:rgba(255,255,255,0.5)}
+
+/* ── RIGHT PANEL ─────────────────────────────────── */
+.right{background:var(--cream);display:flex;align-items:center;justify-content:center;padding:3rem;overflow-y:auto}
+
+.form-card{width:100%;max-width:420px}
+
+.form-card-header{margin-bottom:2.25rem}
+.form-card-header h2{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--forest);font-weight:600;margin-bottom:6px}
+.form-card-header p{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* Tabs */
+.tabs{display:flex;background:white;border:1px solid var(--border);border-radius:8px;padding:4px;margin-bottom:2rem;gap:4px}
+.tab{flex:1;padding:10px;border:none;background:none;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.tab.active{background:var(--forest);color:white}
+
+/* Floating label inputs */
+.field{position:relative;margin-bottom:1.25rem}
+.field input{width:100%;padding:18px 16px 8px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;background:white;color:var(--text);outline:none;transition:all 0.2s;-webkit-appearance:none}
+.field input:focus{border-color:var(--forest);box-shadow:0 0 0 3px rgba(30,58,30,0.08)}
+.field input.error{border-color:#c0392b}
+.field label{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);transition:all 0.2s;pointer-events:none;background:white;padding:0 4px}
+.field input:focus ~ label,
+.field input:not(:placeholder-shown) ~ label{top:10px;transform:none;font-size:11px;color:var(--forest);font-weight:500;letter-spacing:0.3px}
+.field .eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:4px;transition:color 0.2s;z-index:2;line-height:1}
+.field .eye-btn:hover{color:var(--forest)}
+/* push text away from the eye icon so it doesn't overlap */
+.field:has(.eye-btn) input{padding-right:46px}
+
+/* Phone input with country code */
+.phone-wrap{display:flex;gap:8px}
+.country-sel{flex-shrink:0;padding:18px 12px 8px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;background:white;color:var(--text);outline:none;min-width:90px;cursor:pointer;transition:all 0.2s}
+.country-sel:focus{border-color:var(--forest)}
+.phone-wrap .field{flex:1}
+
+/* OTP boxes */
+.otp-wrap{display:flex;gap:10px;justify-content:center;margin-bottom:1.5rem}
+.otp-box{width:52px;height:56px;border:1.5px solid var(--border);border-radius:8px;font-size:22px;font-weight:600;text-align:center;color:var(--forest);background:white;outline:none;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.otp-box:focus{border-color:var(--forest);box-shadow:0 0 0 3px rgba(30,58,30,0.1);transform:scale(1.05)}
+.otp-box.filled{background:rgba(30,58,30,0.04)}
+
+/* Name row */
+.name-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Divider */
+.divider{display:flex;align-items:center;gap:12px;margin:1.5rem 0;color:var(--muted);font-size:13px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Social buttons */
+.social-btns{display:flex;gap:10px;margin-bottom:0}
+.social-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);font-weight:500;transition:all 0.2s}
+.social-btn:hover{border-color:var(--forest);background:rgba(30,58,30,0.03)}
+.social-btn img{width:18px;height:18px}
+
+/* Submit button */
+.submit-btn{width:100%;padding:15px;background:var(--forest);color:white;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.25s;position:relative;overflow:hidden;letter-spacing:0.3px;margin-top:0.5rem}
+.submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%)}
+.submit-btn:hover{background:var(--forest2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(30,58,30,0.3)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-inner{display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Forgot / Terms */
+.forgot-link{text-align:right;margin-top:-0.75rem;margin-bottom:1.25rem}
+.forgot-link a{font-size:13px;color:var(--saffron);text-decoration:none;transition:color 0.2s}
+.forgot-link a:hover{color:var(--forest)}
+.terms{font-size:12px;color:var(--muted);text-align:center;margin-top:1.25rem;line-height:1.7}
+.terms a{color:var(--saffron);text-decoration:none}
+
+/* Field hint */
+.field-hint{font-size:11px;color:var(--muted);margin-top:-0.9rem;margin-bottom:1rem;padding-left:4px}
+
+/* Success state */
+.success-screen{display:none;text-align:center;padding:2rem 0}
+.success-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--forest),var(--forest2));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:32px;animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.success-screen h3{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest);margin-bottom:0.75rem}
+.success-screen p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:2rem}
+.go-shop-btn{display:inline-block;background:var(--forest);color:white;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all 0.2s;border:none;cursor:pointer}
+.go-shop-btn:hover{background:var(--forest2);transform:translateY(-2px)}
+
+/* Step indicator for OTP flow */
+.otp-step{display:none}
+.otp-step.active{display:block}
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:1.5rem;transition:color 0.2s}
+.back-btn:hover{color:var(--forest)}
+
+/* Error message */
+.error-msg{background:#FEF0F0;border:1px solid #FECACA;border-radius:6px;padding:10px 14px;font-size:13px;color:#B91C1C;margin-bottom:1rem;display:none;align-items:center;gap:8px}
+.error-msg.show{display:flex}
+.success-msg{background:#F0FDF4;border:1px solid #A7F3D0;border-radius:6px;padding:10px 14px;font-size:13px;color:#065F46;margin-bottom:1rem;display:none;align-items:center;gap:8px}
+.success-msg.show{display:flex}
+
+/* Strength bar */
+.strength-wrap{margin-top:-0.9rem;margin-bottom:1rem}
+.strength-bars{display:flex;gap:4px;margin-bottom:4px}
+.s-bar{height:3px;flex:1;border-radius:2px;background:var(--border);transition:background 0.3s}
+.strength-label{font-size:11px;color:var(--muted)}
+
+/* ── MODALS ──────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 0.25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:white;border-radius:16px;padding:2rem;width:100%;max-width:400px;box-shadow:0 24px 60px rgba(0,0,0,0.2);transform:translateY(20px);transition:transform 0.25s}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px}
+
+/* Google modal */
+.g-header{text-align:center;margin-bottom:1.5rem}
+.g-logo{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:1rem}
+.g-title{font-size:22px;color:#202124;font-weight:400;margin-bottom:6px}
+.g-sub{font-size:14px;color:#5f6368}
+.g-account{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid #dadce0;border-radius:8px;cursor:pointer;transition:border-color 0.2s;margin-bottom:1rem}
+.g-account:hover{border-color:#4285F4;background:#f8f9ff}
+.g-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#4285F4,#34A853);color:white;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;flex-shrink:0}
+.g-account-name{font-size:15px;color:#202124;font-weight:500}
+.g-account-email{font-size:13px;color:#5f6368;margin-top:2px}
+.g-check{margin-left:auto;font-size:18px;display:none}
+.g-account.selected .g-check{display:block}
+.g-account.selected{border-color:#4285F4;background:#f0f4ff}
+.g-add{display:flex;align-items:center;gap:12px;padding:12px 16px;color:#1a73e8;font-size:14px;cursor:pointer;border-radius:8px}
+.g-add:hover{background:#f1f3f4}
+.g-btn{width:100%;padding:12px;background:#4285F4;color:white;border:none;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:0.5rem;transition:background 0.2s}
+.g-btn:hover{background:#3367D6}
+.g-footer{text-align:center;font-size:12px;color:#5f6368;margin-top:1rem}
+
+/* Phone OTP modal */
+.otp-modal-step{display:none}
+.otp-modal-step.active{display:block}
+.phone-input-group{display:flex;gap:8px;margin-bottom:1rem}
+.phone-input-group select{padding:12px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;background:white;outline:none;min-width:90px}
+.phone-input-group input{flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+.phone-input-group input:focus,.phone-input-group select:focus{border-color:var(--forest)}
+.otp-dev-banner{background:#FFF9C4;border:1px solid #F9E04B;border-radius:8px;padding:12px 14px;font-size:13px;color:#7a5c00;margin-bottom:1rem;display:none;align-items:center;gap:8px}
+.otp-dev-banner.show{display:flex}
+.otp-dev-code{font-size:22px;font-weight:700;letter-spacing:6px;color:var(--forest);margin-top:4px}
+.send-otp-btn{width:100%;padding:13px;background:var(--forest);color:white;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s}
+.send-otp-btn:hover{background:var(--forest2)}
+.send-otp-btn:disabled{opacity:0.6;cursor:not-allowed}
+.resend-link{text-align:center;font-size:13px;color:var(--muted);margin-top:0.75rem}
+.resend-link a{color:var(--saffron);text-decoration:none;cursor:pointer}
+
+/* Responsive */
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .left{display:none}
+  html,body{overflow:auto}
+  .right{padding:2rem 1.5rem;min-height:100vh;align-items:flex-start;padding-top:3rem}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- ── LEFT BRAND PANEL ── -->
+  <div class="left">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid-overlay"></div>
+    <div class="leaf-deco leaf1">🌿</div>
+    <div class="leaf-deco leaf2">🌱</div>
+    <div class="leaf-deco leaf3">🍃</div>
+
+    <div class="left-content">
+      <div class="brand-mark">
+        <div class="brand-circle">🌿</div>
+        <div class="brand-text">
+          <div class="t1">சித்த வளம்</div>
+          <div class="t2">Siddha Valam</div>
+        </div>
+      </div>
+
+      <h1 class="left-headline">
+        Ancient<br><em>Healing</em><br>For Modern Life
+      </h1>
+      <p class="left-sub">
+        Join thousands of families who trust சித்த வளம் for authentic Siddha and Ayurvedic products, sourced directly from Tamil Nadu's heritage farms.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat"><div class="n">12K+</div><div class="l">Happy Customers</div></div>
+        <div class="stat"><div class="n">500+</div><div class="l">Products</div></div>
+        <div class="stat"><div class="n">100%</div><div class="l">Organic</div></div>
+      </div>
+
+      <div class="testi-pill">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"Pure, authentic products that actually work. My family has been ordering for 2 years. The quality never disappoints."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div class="testi-name">Priya S. — Chennai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT FORM PANEL ── -->
+  <div class="right">
+    <div class="form-card">
+
+      <!-- Header -->
+      <div class="form-card-header">
+        <!-- Mobile brand -->
+        <div style="display:none" id="mobileBrand">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem">
+            <span style="font-size:28px">🌿</span>
+            <div>
+              <div style="font-family:'Tiro Tamil',serif;font-size:17px;color:var(--forest)">சித்த வளம்</div>
+              <div style="font-size:10px;letter-spacing:2px;color:var(--saffron);text-transform:uppercase">Siddha Valam</div>
+            </div>
+          </div>
+        </div>
+        <h2 id="formTitle">Welcome back</h2>
+        <p id="formSubtitle">Sign in to track orders, save addresses & get exclusive offers.</p>
+      </div>
+
+      <!-- Error / Success messages -->
+      <div class="error-msg" id="errorMsg"><span>⚠️</span><span id="errorText">Something went wrong</span></div>
+      <div class="success-msg" id="successMsg"><span>✓</span><span id="successText">Success</span></div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <!-- ────── LOGIN FORM ────── -->
+      <div id="loginForm">
+        <div class="field">
+          <input type="email" id="lEmail" placeholder=" " autocomplete="email">
+          <label for="lEmail">Email address</label>
+        </div>
+        <div class="field">
+          <input type="password" id="lPassword" placeholder=" " autocomplete="current-password">
+          <label for="lPassword">Password</label>
+          <button class="eye-btn" type="button" onclick="togglePass('lPassword',this)">👁</button>
+        </div>
+        <div class="forgot-link"><a href="#" onclick="showForgot();return false">Forgot password?</a></div>
+        <button class="submit-btn" id="loginBtn" onclick="doLogin()">
+          <div class="btn-inner">
+            <div class="btn-spinner" id="loginSpinner"></div>
+            <span id="loginBtnText">Sign In →</span>
+          </div>
+        </button>
+        <div class="divider">or continue with</div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="openGoogleModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+          <button class="social-btn" onclick="openPhoneModal()">
+            <span style="font-size:16px">📱</span>
+            Phone OTP
+          </button>
+        </div>
+        <div class="terms">By signing in, you agree to our <a href="#">Terms of Service</a> & <a href="#">Privacy Policy</a></div>
+      </div>
+
+      <!-- ────── REGISTER FORM ────── -->
+      <div id="registerForm" style="display:none">
+        <div class="name-row">
+          <div class="field">
+            <input type="text" id="rFirst" placeholder=" " autocomplete="given-name">
+            <label for="rFirst">First name</label>
+          </div>
+          <div class="field">
+            <input type="text" id="rLast" placeholder=" " autocomplete="family-name">
+            <label for="rLast">Last name</label>
+          </div>
+        </div>
+        <div class="field">
+          <input type="email" id="rEmail" placeholder=" " autocomplete="email">
+          <label for="rEmail">Email address</label>
+        </div>
+        <div style="margin-bottom:1.25rem">
+          <div class="phone-wrap">
+            <select class="country-sel" id="rCountry">
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+65">🇸🇬 +65</option>
+            </select>
+            <div class="field" style="margin-bottom:0">
+              <input type="tel" id="rPhone" placeholder=" " maxlength="10" autocomplete="tel">
+              <label for="rPhone">Mobile number</label>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <input type="password" id="rPassword" placeholder=" " autocomplete="new-password" oninput="checkStrength(this.value)">
+          <label for="rPassword">Create password</label>
+          <button class="eye-btn" type="button" onclick="togglePass('rPassword',this)">👁</button>
+        </div>
+        <div class="strength-wrap" id="strengthWrap" style="display:none">
+          <div class="strength-bars">
+            <div class="s-bar" id="sb1"></div>
+            <div class="s-bar" id="sb2"></div>
+            <div class="s-bar" id="sb3"></div>
+            <div class="s-bar" id="sb4"></div>
+          </div>
+          <div class="strength-label" id="strengthLabel">Weak</div>
+        </div>
+        <div class="field">
+          <input type="password" id="rConfirm" placeholder=" " autocomplete="new-password">
+          <label for="rConfirm">Confirm password</label>
+        </div>
+        <button class="submit-btn" id="registerBtn" onclick="doRegister()">
+          <div class="btn-inner">
+            <div class="btn-spinner" id="registerSpinner"></div>
+            <span id="registerBtnText">Create Account →</span>
+          </div>
+        </button>
+        <div class="terms" style="margin-top:1rem">By creating an account, you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></div>
+      </div>
+
+      <!-- ────── SUCCESS SCREEN ────── -->
+      <div class="success-screen" id="successScreen">
+        <div class="success-icon">✓</div>
+        <h3 id="successTitle">Welcome!</h3>
+        <p id="successBody">You're now signed in. Explore our collection of authentic Siddha and Ayurvedic products.</p>
+        <button class="go-shop-btn" onclick="goToShop()">🌿 Go to Shop</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" style="position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest);color:white;padding:12px 24px;border-radius:6px;font-size:14px;opacity:0;transition:all 0.3s;z-index:999;white-space:nowrap;pointer-events:none"></div>
+
+<!-- ── ALREADY EXISTS POPUP ── -->
+<div class="modal-overlay" id="alreadyExistsModal" onclick="closeModalOnBg(event,'alreadyExistsModal')">
+  <div class="modal-box" style="position:relative;text-align:center;max-width:360px">
+    <div style="font-size:48px;margin-bottom:1rem">👤</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest);font-weight:600;margin-bottom:0.5rem">Account Already Exists</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:0.5rem">An account with <strong id="existingEmail" style="color:var(--forest)"></strong> already exists.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:1.75rem">Would you like to sign in instead?</p>
+    <button onclick="switchToLoginWithEmail()" style="width:100%;padding:13px;background:var(--forest);color:white;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:0.75rem">Yes, Sign Me In →</button>
+    <button onclick="closeModal('alreadyExistsModal')" style="width:100%;padding:12px;background:none;color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif">Use a Different Email</button>
+  </div>
+</div>
+
+<!-- ── GOOGLE MODAL ── -->
+<div class="modal-overlay" id="googleModal" onclick="closeModalOnBg(event,'googleModal')">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeModal('googleModal')">✕</button>
+    <div class="g-header">
+      <div class="g-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <span style="font-size:20px;color:#5f6368;font-weight:300">Google</span>
+      </div>
+      <div class="g-title">Choose an account</div>
+      <div class="g-sub">to continue to சித்த வளம்</div>
+    </div>
+    <div id="googleAccounts">
+      <div class="g-account selected" onclick="selectGoogleAccount(this,'gksince1990@gmail.com','Kumaran Ganesan')">
+        <div class="g-avatar">K</div>
+        <div>
+          <div class="g-account-name">Kumaran Ganesan</div>
+          <div class="g-account-email">gksince1990@gmail.com</div>
+        </div>
+        <div class="g-check">✓</div>
+      </div>
+      <div class="g-add" onclick="addAnotherGoogle()">
+        <span style="font-size:20px">＋</span>
+        <span>Use another account</span>
+      </div>
+    </div>
+    <div id="googleCustomEmail" style="display:none;margin-bottom:1rem">
+      <input type="email" id="gCustomEmail" placeholder="Enter Google email" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:8px">
+      <input type="text" id="gCustomName" placeholder="Your name" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none">
+    </div>
+    <button class="g-btn" id="googleContinueBtn" onclick="doGoogleLogin()">Continue</button>
+    <div class="g-footer">By continuing, Google will share your name and email with சித்த வளம்</div>
+  </div>
+</div>
+
+<!-- ── PHONE OTP MODAL ── -->
+<div class="modal-overlay" id="phoneModal" onclick="closeModalOnBg(event,'phoneModal')">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeModal('phoneModal')">✕</button>
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:28px;margin-bottom:0.5rem">📱</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--forest);font-weight:600">Sign in with Phone</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px">We'll send a 6-digit OTP to your number</div>
+    </div>
+
+    <!-- Step 1: Enter phone -->
+    <div class="otp-modal-step active" id="otpStep1">
+      <div class="phone-input-group">
+        <select id="otpCountry">
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+971">🇦🇪 +971</option>
+        </select>
+        <input type="tel" id="otpPhone" placeholder="9384858316" maxlength="10">
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:1rem">Enter 10-digit mobile number (without country code)</div>
+      <button class="send-otp-btn" id="sendOtpBtn" onclick="sendOTP()">Send OTP →</button>
+    </div>
+
+    <!-- Step 2: Enter OTP -->
+    <div class="otp-modal-step" id="otpStep2">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:0.5rem">OTP sent to <strong id="otpPhoneDisplay"></strong></div>
+      <div class="otp-dev-banner" id="otpDevBanner">
+        <div>
+          <div>🧪 Test Mode — Your OTP:</div>
+          <div class="otp-dev-code" id="otpDevCode">------</div>
+        </div>
+      </div>
+      <div class="otp-wrap" style="margin-bottom:1rem">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+      </div>
+      <div id="otpNameRow" style="margin-bottom:1rem">
+        <input type="text" id="otpName" placeholder="Your name (for new accounts)" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none">
+      </div>
+      <button class="send-otp-btn" id="verifyOtpBtn" onclick="verifyOTP()">Verify & Sign In →</button>
+      <div class="resend-link">Didn't receive? <a onclick="resendOTP()">Resend OTP</a> · <a onclick="goBackPhone()">Change number</a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── RESPONSIVE: show mobile brand on small screens ──────
+if (window.innerWidth <= 900) {
+  document.getElementById('mobileBrand').style.display = 'block';
+}
+
+// ── TAB SWITCH ──────────────────────────────────────────
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+  document.getElementById('loginForm').style.display    = isLogin ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = isLogin ? 'none'  : 'block';
+  document.getElementById('formTitle').textContent     = isLogin ? 'Welcome back'       : 'Create account';
+  document.getElementById('formSubtitle').textContent  = isLogin ? 'Sign in to track orders, save addresses & get exclusive offers.' : 'Join 12,000+ families who trust Siddha Valam.';
+  hideMessages();
+}
+
+// ── TOGGLE PASSWORD ─────────────────────────────────────
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  const show  = input.type === 'password';
+  input.type  = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+}
+
+// ── PASSWORD STRENGTH ───────────────────────────────────
+function checkStrength(val) {
+  const wrap = document.getElementById('strengthWrap');
+  if (!val) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  const bars   = [document.getElementById('sb1'),document.getElementById('sb2'),document.getElementById('sb3'),document.getElementById('sb4')];
+  const label  = document.getElementById('strengthLabel');
+  let score    = 0;
+  if (val.length >= 8)         score++;
+  if (/[A-Z]/.test(val))       score++;
+  if (/[0-9]/.test(val))       score++;
+  if (/[^A-Za-z0-9]/.test(val))score++;
+  const colors = ['#c0392b','#e67e22','#f1c40f','#27ae60'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  bars.forEach((b, i) => { b.style.background = i < score ? colors[score - 1] : 'var(--border)'; });
+  label.textContent  = labels[score - 1] || 'Weak';
+  label.style.color  = colors[Math.max(0, score - 1)];
+}
+
+// ── OTP INPUT NAVIGATION ────────────────────────────────
+function setupOtpBoxes() {
+  const boxes = document.querySelectorAll('.otp-box');
+  boxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.classList.toggle('filled', !!box.value);
+      if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+    });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+    });
+    box.addEventListener('paste', e => {
+      const text = e.clipboardData.getData('text').replace(/\D/g,'');
+      boxes.forEach((b, j) => { b.value = text[j] || ''; b.classList.toggle('filled', !!b.value); });
+      boxes[Math.min(text.length, boxes.length - 1)].focus();
+      e.preventDefault();
+    });
+  });
+}
+
+// ── MESSAGES ────────────────────────────────────────────
+function showError(msg)   { const el = document.getElementById('errorMsg');   el.classList.add('show');   document.getElementById('errorText').textContent = msg;   document.getElementById('successMsg').classList.remove('show'); }
+function showSuccess(msg) { const el = document.getElementById('successMsg'); el.classList.add('show');   document.getElementById('successText').textContent = msg; document.getElementById('errorMsg').classList.remove('show'); }
+function hideMessages()   { document.getElementById('errorMsg').classList.remove('show'); document.getElementById('successMsg').classList.remove('show'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(20px)'; }, 2500);
+}
+
+// ── LOADING STATE ───────────────────────────────────────
+function setLoading(btnId, spinnerId, textId, loading, text) {
+  document.getElementById(btnId).disabled = loading;
+  document.getElementById(spinnerId).style.display = loading ? 'block' : 'none';
+  document.getElementById(textId).textContent = loading ? '' : text;
+}
+
+// ── LOGIN ───────────────────────────────────────────────
+async function doLogin() {
+  const email    = document.getElementById('lEmail').value.trim();
+  const password = document.getElementById('lPassword').value;
+  hideMessages();
+
+  if (!email || !password) { showError('Please fill in all fields'); return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { showError('Please enter a valid email address'); return; }
+
+  setLoading('loginBtn','loginSpinner','loginBtnText', true, 'Sign In →');
+
+  try {
+    const res  = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('sv_user', JSON.stringify(data.user));
+      showSuccessScreen('Welcome back, ' + data.user.name.split(' ')[0] + '!', 'You are now signed in. Your orders, addresses and preferences are all saved.');
+    } else {
+      showError(data.error || 'Invalid email or password');
+    }
+  } catch(e) {
+    // Demo mode — no backend auth yet
+    showSuccess('Demo mode: proceeding as guest');
+    setTimeout(() => goToShop(), 1200);
+  } finally {
+    setLoading('loginBtn','loginSpinner','loginBtnText', false, 'Sign In →');
+  }
+}
+
+// ── REGISTER ────────────────────────────────────────────
+async function doRegister() {
+  const first    = document.getElementById('rFirst').value.trim();
+  const last     = document.getElementById('rLast').value.trim();
+  const email    = document.getElementById('rEmail').value.trim();
+  const phone    = document.getElementById('rPhone').value.trim();
+  const password = document.getElementById('rPassword').value;
+  const confirm  = document.getElementById('rConfirm').value;
+  hideMessages();
+
+  if (!first || !email || !phone || !password) { showError('Please fill in all required fields'); return; }
+  if (!/\S+@\S+\.\S+/.test(email))             { showError('Please enter a valid email address'); return; }
+  if (!/^\d{10}$/.test(phone.replace(/\D/g,''))) { showError('Please enter a valid 10-digit mobile number'); return; }
+  if (password.length < 6)                       { showError('Password must be at least 6 characters'); return; }
+  if (password !== confirm)                      { showError('Passwords do not match'); return; }
+
+  setLoading('registerBtn','registerSpinner','registerBtnText', true, 'Create Account →');
+
+  try {
+    const country = document.getElementById('rCountry').value;
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: (first + ' ' + last).trim(), email, phone: country + phone, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('sv_user', JSON.stringify(data.user));
+      showSuccessScreen('Welcome to Siddha Valam, ' + first + '! 🌿', 'Your account is created. Enjoy 20% off your first order with code SIDDHA20.');
+    } else if (data.error && data.error.toLowerCase().includes('already exists')) {
+      showAlreadyExistsPopup(email);
+    } else {
+      showError(data.error || 'Could not create account');
+    }
+  } catch(e) {
+    // Demo mode
+    const user = { name: (first + ' ' + last).trim(), email, phone };
+    localStorage.setItem('sv_user', JSON.stringify(user));
+    showSuccessScreen('Welcome, ' + first + '! 🌿', 'Your account is ready. Enjoy 20% off your first order with code SIDDHA20.');
+  } finally {
+    setLoading('registerBtn','registerSpinner','registerBtnText', false, 'Create Account →');
+  }
+}
+
+// ── SUCCESS SCREEN ──────────────────────────────────────
+function showSuccessScreen(title, body) {
+  document.getElementById('loginForm').style.display    = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.querySelector('.tabs').style.display         = 'none';
+  document.getElementById('formTitle').textContent      = '';
+  document.getElementById('formSubtitle').textContent   = '';
+  document.getElementById('successScreen').style.display= 'block';
+  document.getElementById('successTitle').textContent   = title;
+  document.getElementById('successBody').textContent    = body;
+  hideMessages();
+}
+
+function goToShop() {
+  window.location.href = 'shop.html';
+}
+
+// ── FORGOT PASSWORD ─────────────────────────────────────
+function showForgot() {
+  const email = document.getElementById('lEmail').value.trim();
+  if (!email) { showError('Please enter your email address first'); return; }
+  showSuccess(`Password reset link sent to ${email} (demo mode)`);
+}
+
+// ── ENTER KEY ───────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const loginVisible = document.getElementById('loginForm').style.display !== 'none';
+  if (loginVisible) doLogin(); else doRegister();
+});
+
+// ── ALREADY EXISTS POPUP ─────────────────────────────────────
+let _existingEmail = '';
+function showAlreadyExistsPopup(email) {
+  _existingEmail = email;
+  document.getElementById('existingEmail').textContent = email;
+  openModal('alreadyExistsModal');
+}
+function switchToLoginWithEmail() {
+  closeModal('alreadyExistsModal');
+  switchTab('login');
+  const emailField = document.getElementById('lEmail');
+  if (emailField) {
+    emailField.value = _existingEmail;
+    document.getElementById('lPassword').focus();
+  }
+}
+
+// ── MODAL HELPERS ───────────────────────────────────────────
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeModalOnBg(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+
+// ── GOOGLE MODAL ─────────────────────────────────────────────
+let selectedGoogleEmail='gksince1990@gmail.com';
+let selectedGoogleName='Kumaran Ganesan';
+let usingCustomGoogle=false;
+
+function openGoogleModal(){
+  usingCustomGoogle=false;
+  document.getElementById('googleCustomEmail').style.display='none';
+  document.querySelectorAll('.g-account').forEach(a=>a.classList.remove('selected'));
+  const first=document.querySelector('.g-account');
+  if(first) first.classList.add('selected');
+  selectedGoogleEmail='gksince1990@gmail.com';
+  selectedGoogleName='Kumaran Ganesan';
+  openModal('googleModal');
+}
+
+function selectGoogleAccount(el,email,name){
+  document.querySelectorAll('.g-account').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedGoogleEmail=email; selectedGoogleName=name;
+  usingCustomGoogle=false;
+  document.getElementById('googleCustomEmail').style.display='none';
+}
+
+function addAnotherGoogle(){
+  document.querySelectorAll('.g-account').forEach(a=>a.classList.remove('selected'));
+  usingCustomGoogle=true;
+  document.getElementById('googleCustomEmail').style.display='block';
+  document.getElementById('gCustomEmail').focus();
+}
+
+async function doGoogleLogin(){
+  let email=selectedGoogleEmail, name=selectedGoogleName;
+  if(usingCustomGoogle){
+    email=document.getElementById('gCustomEmail').value.trim();
+    name=document.getElementById('gCustomName').value.trim()||email.split('@')[0];
+    if(!email||!/\S+@\S+\.\S+/.test(email)){showToast('Please enter a valid email');return;}
+  }
+  const btn=document.getElementById('googleContinueBtn');
+  btn.disabled=true; btn.textContent='Signing in...';
+  try{
+    const res=await fetch('/api/auth/google',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name})});
+    const data=await res.json();
+    if(data.success){
+      localStorage.setItem('sv_user',JSON.stringify(data.user));
+      closeModal('googleModal');
+      showSuccessScreen('Welcome, '+data.user.name.split(' ')[0]+'! 🌿','You are now signed in with Google.');
+    } else { showToast(data.error||'Google sign-in failed'); }
+  }catch(e){
+    // Demo fallback
+    const user={name,email,phone:''};
+    localStorage.setItem('sv_user',JSON.stringify(user));
+    closeModal('googleModal');
+    showSuccessScreen('Welcome, '+name.split(' ')[0]+'! 🌿','You are now signed in with Google.');
+  } finally { btn.disabled=false; btn.textContent='Continue'; }
+}
+
+// ── PHONE OTP MODAL ──────────────────────────────────────────
+let currentOtpPhone='';
+
+function openPhoneModal(){
+  document.getElementById('otpStep1').classList.add('active');
+  document.getElementById('otpStep2').classList.remove('active');
+  document.getElementById('otpPhone').value='9384858316';
+  document.getElementById('otpDevBanner').classList.remove('show');
+  openModal('phoneModal');
+  setupOtpBoxes();
+}
+
+async function sendOTP(){
+  const raw=document.getElementById('otpPhone').value.replace(/\D/g,'');
+  const country=document.getElementById('otpCountry').value;
+  if(!/^\d{10}$/.test(raw)){showToast('Enter a valid 10-digit number');return;}
+  currentOtpPhone=country+raw;
+  const btn=document.getElementById('sendOtpBtn');
+  btn.disabled=true; btn.textContent='Sending...';
+  try{
+    const res=await fetch('/api/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:currentOtpPhone})});
+    const data=await res.json();
+    document.getElementById('otpPhoneDisplay').textContent=currentOtpPhone;
+    if(data.devOtp){
+      document.getElementById('otpDevBanner').classList.add('show');
+      document.getElementById('otpDevCode').textContent=data.devOtp;
+    }
+    document.getElementById('otpStep1').classList.remove('active');
+    document.getElementById('otpStep2').classList.add('active');
+    // Auto-fill OTP boxes in test mode
+    if(data.devOtp){
+      const boxes=document.querySelectorAll('#phoneModal .otp-box');
+      data.devOtp.split('').forEach((d,i)=>{if(boxes[i]){boxes[i].value=d;boxes[i].classList.add('filled');}});
+    }
+  }catch(e){showToast('Could not send OTP. Try again.');}
+  finally{btn.disabled=false; btn.textContent='Send OTP →';}
+}
+
+async function verifyOTP(){
+  const boxes=document.querySelectorAll('#phoneModal .otp-box');
+  const otp=Array.from(boxes).map(b=>b.value).join('');
+  if(otp.length<6){showToast('Enter the 6-digit OTP');return;}
+  const name=document.getElementById('otpName').value.trim();
+  const btn=document.getElementById('verifyOtpBtn');
+  btn.disabled=true; btn.textContent='Verifying...';
+  try{
+    const res=await fetch('/api/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:currentOtpPhone,otp,name})});
+    const data=await res.json();
+    if(data.success){
+      localStorage.setItem('sv_user',JSON.stringify(data.user));
+      closeModal('phoneModal');
+      showSuccessScreen('Welcome'+(data.user.name&&data.user.name!=='Customer'?' '+data.user.name.split(' ')[0]:'')+' 🌿', data.isNew?'Account created! Enjoy 20% off your first order with SIDDHA20.':'You are now signed in.');
+    } else { showToast(data.error||'OTP verification failed'); }
+  }catch(e){showToast('Verification failed. Try again.');}
+  finally{btn.disabled=false; btn.textContent='Verify & Sign In →';}
+}
+
+function resendOTP(){
+  document.getElementById('otpStep2').classList.remove('active');
+  document.getElementById('otpStep1').classList.add('active');
+  setTimeout(sendOTP,300);
+}
+
+function goBackPhone(){
+  document.getElementById('otpStep2').classList.remove('active');
+  document.getElementById('otpStep1').classList.add('active');
+}
+
+// ── CHECK IF ALREADY LOGGED IN ───────────────────────────────
+// Check if already logged in
+const savedUser = localStorage.getItem('sv_user');
+if (savedUser) {
+  try {
+    const u = JSON.parse(savedUser);
+    showSuccessScreen('Welcome back, ' + u.name.split(' ')[0] + '! 🌿', 'You are already signed in.');
+  } catch(e) {}
+}
+</script>
+</body>
+</html>
