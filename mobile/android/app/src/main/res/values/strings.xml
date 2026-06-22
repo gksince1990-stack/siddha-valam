@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Siddha Valam</string>
+    <string name="title_activity_main">Siddha Valam</string>
+    <string name="package_name">com.siddhavalam.app</string>
+    <string name="custom_url_scheme">com.siddhavalam.app</string>
+</resources>
